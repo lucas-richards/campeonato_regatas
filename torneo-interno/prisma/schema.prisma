@@ -38,6 +38,7 @@ model categoria {
   equipo        equipo[]
   jugador       jugador[]
   zona          zona[]
+  sexo          String
 
   @@index([novedad_id], map: "fk_categoria_novedad1_idx")
 }
@@ -135,6 +136,7 @@ model jugador_infantil {
   timestamp           DateTime        @default(now()) @db.Timestamp(0)
   jugador_id          Int
   tercer_hijo         Int?            @db.TinyInt
+  monto_inscripcion   Float?
   torneo              torneo          @relation(fields: [Torneo_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_Inscripto_Torneo1")
   jugador             jugador         @relation(fields: [jugador_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_Inscripto_jugador1")
   nivel               nivel           @relation(fields: [nivel_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_Inscripto_nivel1")
