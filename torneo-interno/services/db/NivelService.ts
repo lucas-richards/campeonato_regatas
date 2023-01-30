@@ -1,5 +1,5 @@
 import { nivel, prisma } from "@prisma/client";
-import { Level } from "../models/Player";
+import { Level } from "../../models/Player";
 import { prismaClient } from "./PrismaClientServer";
 
 const client = prismaClient;

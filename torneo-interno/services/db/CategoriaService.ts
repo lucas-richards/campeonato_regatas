@@ -1,4 +1,4 @@
-import { Category } from "../models/Player";
+import { Category } from "../../models/Player";
 import { prismaClient } from "./PrismaClientServer";
 import { categoria } from "@prisma/client";
 

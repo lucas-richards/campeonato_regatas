@@ -1,4 +1,4 @@
-import { Owner } from "../models/Player";
+import { Owner } from "../../models/Player";
 import { ID, prismaClient } from "./PrismaClientServer";
 
 const client = prismaClient;

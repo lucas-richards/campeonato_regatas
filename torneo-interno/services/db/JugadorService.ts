@@ -1,4 +1,4 @@
-import { Player } from "../models/Player";
+import { Player } from "../../models/Player";
 import { prismaClient } from "./PrismaClientServer";
 import { getCategoryId } from "./CategoriaService";
 
@@ -20,7 +20,7 @@ export const createJugador = async (
   player: Player,
   level: number
 ): Promise<number> => {
-  const category = await getCategoryId(player.birthdate);
+  const category = await getCategoryId(player.birthdate, player.gender);
 
   await client.jugador.create({
     data: {
@@ -42,7 +42,7 @@ export const createJugador = async (
 };
 
 export const updateJugador = async (id: number, player: Player) => {
-  const category = await getCategoryId(player.birthdate);
+  const category = await getCategoryId(player.birthdate,player.gender);
 
   await client.jugador.update({
     where: {

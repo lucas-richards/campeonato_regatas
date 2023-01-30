@@ -24,13 +24,14 @@ export interface Owner {
 export interface YouthPlayer {
   emergencyPhone: string;
   member?: boolean;
-  position: Position;
-  level: Level;
+  position?: Position;
+  level?: Level;
   tournament?: Tournament;
-  owner: Owner;
-  player: Player;
+  owner?: Owner;
+  player?: Player;
   canPlay?: boolean;
   thirdChild?: boolean;
+  captain?: boolean;
 }
 
 export interface Category {

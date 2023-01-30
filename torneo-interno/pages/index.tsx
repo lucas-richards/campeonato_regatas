@@ -1,6 +1,6 @@
 import * as React from "react";
 import { Owner, Player } from "../models/Player";
-import { InscripcionInfantil } from "./api/inscripcion/infantil";
+import { YouthInscription } from "./api/inscripcion/infantil";
 
 export interface IAppProps {}
 
@@ -23,12 +23,13 @@ export default function App(props: IAppProps) {
     gender: "M",
   };
 
-  const application: InscripcionInfantil = {
+  const application: YouthInscription = {
     emergencyPhone: "1136718735",
     position: 1,
     level: 2,
     owner: owner,
     player: player,
+    captain: true,
   };
   fetch("/api/inscripcion/infantil", {
     method: "POST",

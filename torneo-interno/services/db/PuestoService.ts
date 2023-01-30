@@ -1,5 +1,5 @@
 import { puesto } from "@prisma/client";
-import { Position } from "../models/Player";
+import { Position } from "../../models/Player";
 import { prismaClient } from "./PrismaClientServer";
 
 const client = prismaClient;

@@ -1,12 +1,14 @@
 import { torneo } from "@prisma/client";
-import { Tournament } from "../models/Player";
+import { Tournament } from "../../models/Player";
 import { prismaClient } from "./PrismaClientServer";
 
 type GetTournaments = () => Promise<Tournament[]>;
 
 const client = prismaClient;
 
-export const getTournaments: GetTournaments = async () => {
+export const getTournaments: GetTournaments = async (): Promise<
+  Tournament[]
+> => {
   const tournaments: torneo[] = await client.torneo.findMany();
   return tournaments.map((el) => {
     return { year: el.ano_torneo || "", id: el.id };

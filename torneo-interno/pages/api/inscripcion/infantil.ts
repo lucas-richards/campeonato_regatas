@@ -1,15 +1,16 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import { Owner, Player } from "../../../models/Player";
-import { inscripcionInfantil } from "../../../services/InscripcionService";
+import { youthInscription } from "../../../services/InscriptionService";
 
 interface Data {}
 
-export interface InscripcionInfantil {
+export interface YouthInscription {
   emergencyPhone: string;
   position: number;
   level: number;
   owner: Owner;
   player: Player;
+  captain: boolean;
 }
 
 export default async function handler(
@@ -17,10 +18,9 @@ export default async function handler(
   res: NextApiResponse<Data>
 ) {
   if (req.method === "POST") {
-    console.log("hola");
-    const formulario: InscripcionInfantil = req.body;
+    const formulario: YouthInscription = req.body;
 
-    const inscripcion = await inscripcionInfantil(formulario);
+    const inscripcion = await youthInscription(formulario);
 
     res.status(200).json({ name: "John Doe" });
   }
