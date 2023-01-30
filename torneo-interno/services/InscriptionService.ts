@@ -1,4 +1,7 @@
-import { YouthInscription } from "../pages/api/inscripcion/infantil";
+import {
+  SeniorInscription,
+  YouthInscription,
+} from "../pages/api/inscripcion/infantil";
 import {
   createResponsable,
   getResponsableId,
@@ -47,7 +50,9 @@ const nullSafePlayerId = async (
   return playerId;
 };
 
-export const youthInscription = async (inscripcion: YouthInscription) => {
+export const youthInscription = async (
+  inscripcion: YouthInscription
+): Promise<YouthPlayer[]> => {
   const ownerId: number = await nullSafeOwnerId(inscripcion.owner);
 
   const levelId: number = await getLevelId(inscripcion.level);
@@ -83,3 +88,5 @@ export const youthInscription = async (inscripcion: YouthInscription) => {
 
   return otherPlayers;
 };
+
+const seniorInscriprion = async (seniorInscription: SeniorInscription) => {};

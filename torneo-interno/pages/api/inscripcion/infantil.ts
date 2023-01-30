@@ -13,6 +13,11 @@ export interface YouthInscription {
   captain: boolean;
 }
 
+export interface SeniorInscription {
+  owner: Owner;
+  players: Player[];
+}
+
 export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse<Data>
