@@ -50,7 +50,7 @@ const YouthInscriptionForm = () => {
         <Grid item xs={12}>
           <MaleYouthForm control={control}></MaleYouthForm>
         </Grid>
-        <Grid Item xs={12}>
+        <Grid item xs={12}>
           <Button type="submit" disabled={!isValid} variant={"contained"}>
             TEST
           </Button>
