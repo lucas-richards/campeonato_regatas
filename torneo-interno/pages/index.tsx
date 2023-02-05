@@ -31,13 +31,16 @@ export default function App(props: IAppProps) {
     player: player,
     captain: true,
   };
-  fetch("/api/inscripcion/infantil", {
+  /**
+   * 
+   *   fetch("/api/inscripcion/infantil", {
     method: "POST",
     body: JSON.stringify(application),
     headers: {
       "Content-Type": "application/json",
     },
   });
+   */
 
   return (
     <div>

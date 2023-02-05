@@ -1,4 +1,4 @@
-import "../styles/globals.css";
+import "../styles/globals.scss";
 import Container from "@mui/material/Container";
 
 import type { AppProps } from "next/app";
