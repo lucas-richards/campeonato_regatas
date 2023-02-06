@@ -43,3 +43,23 @@ export const getCategoryId = async (
 
   return categoria?.id || 0;
 };
+
+export const getCategories = async (
+  gender: string,
+  youth = true
+): Promise<Category[]> => {
+  const categorias: categoria[] = await client.categoria.findMany({
+    where: {
+      sexo: gender,
+      juvenil: youth ? 0 : 1,
+    },
+  });
+
+  return categorias.map((el) => {
+    return {
+      description: el.descripcion,
+      startDate: el["ano_inicio"],
+      endDate: el["ano_fin"],
+    };
+  });
+};

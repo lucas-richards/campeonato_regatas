@@ -17,7 +17,7 @@ export const getAllRegisteredChildren = async (
 
   return children.map((el) => {
     return {
-      emergencyPhone: el.telefono_emergencia || "",
+      emergencyPhone: el.telefono_emergencia,
       canPlay: el.habilitado === 1,
     };
   });

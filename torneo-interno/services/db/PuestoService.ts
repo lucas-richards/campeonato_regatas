@@ -6,8 +6,8 @@ const client = prismaClient;
 
 const createPosition = (puesto: puesto): Position => {
   return {
-    description: puesto.descripcion || "",
-    value: puesto.valor || 0,
+    description: puesto.descripcion,
+    value: puesto.valor,
   };
 };
 export const getPositions = async (): Promise<Position[]> => {

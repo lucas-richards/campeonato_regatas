@@ -8,8 +8,10 @@ import { Typography } from "@mui/material";
 import PhoneTextField from "../commons/PhoneTextField";
 import DatePickerField from "../commons/DatePickerField";
 
-interface OwnerProps {
+interface MaleYouthForm {
   control: any;
+  startDate: Date;
+  endDate: Date;
 }
 
 // const player: Player = {
@@ -31,7 +33,7 @@ interface OwnerProps {
 //   captain: true,
 // };
 
-const MaleYouthForm = (props: OwnerProps) => {
+const MaleYouthForm = (props: MaleYouthForm) => {
   return (
     <Grid container rowGap={2} className={classes.box}>
       <Grid item xs={12}>
@@ -67,12 +69,22 @@ const MaleYouthForm = (props: OwnerProps) => {
           control={props.control}
         ></PhoneTextField>
       </Grid>
-      <Grid item xs={12} sm={6} md={4} pl={1} pr={1}>
+      <Grid item xs={8} sm={4} md={3} pl={1} pr={1}>
         <DatePickerField
           name="playerBirthdate"
           label="Fecha de Nacimiento"
           control={props.control}
+          startDate={props.startDate}
+          endDate={props.endDate}
         ></DatePickerField>
+      </Grid>
+      <Grid item xs={4} sm={2} md={1} pl={1} pr={1}>
+        <NormalTextField
+          name="playerCategory"
+          label="Categoria"
+          control={props.control}
+          disabled={true}
+        ></NormalTextField>
       </Grid>
     </Grid>
   );

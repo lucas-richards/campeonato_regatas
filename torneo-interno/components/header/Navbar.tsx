@@ -11,7 +11,7 @@ function Navbar() {
       <CssBaseline />
       <Toolbar>
         <Avatar alt="escudo" className={classes.link}>
-          <Image src="/logo.png" alt={"Logo regatas"} layout="fill"></Image>
+          <Image src="/logo.png" alt={"Logo regatas"} fill></Image>
         </Avatar>
         <div className={classes.navlinks}>
           <Link href="/" className={classes.link}>

@@ -7,6 +7,7 @@ interface TextProps {
   name: string;
   label: string;
   control: Control;
+  disabled?: boolean;
 }
 
 const NormalTextField = (props: TextProps) => {
@@ -23,6 +24,7 @@ const NormalTextField = (props: TextProps) => {
           variant="standard"
           error={isDirty && invalid}
           {...field}
+          disabled={props.disabled}
           fullWidth
         />
       )}

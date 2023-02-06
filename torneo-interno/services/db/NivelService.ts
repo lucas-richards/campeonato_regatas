@@ -6,8 +6,8 @@ const client = prismaClient;
 
 const createLevel = (nivel: nivel): Level => {
   return {
-    description: nivel.descripcion || "",
-    value: nivel.valor || 0,
+    description: nivel.descripcion,
+    value: nivel.valor,
   };
 };
 export const getLevels = async (): Promise<Level[]> => {

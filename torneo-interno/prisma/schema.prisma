@@ -9,11 +9,11 @@ datasource db {
 
 model Partido {
   id                               Int       @id @default(autoincrement())
-  gol_local                        Int?
-  gol_visitante                    Int?
+  gol_local                        Int
+  gol_visitante                    Int
   local                            Int
   visitante                        Int
-  timestamp                        String?   @default("CURRENT_TIMESTAMP") @db.VarChar(45)
+  timestamp                        String   @default("CURRENT_TIMESTAMP") @db.VarChar(45)
   zona_id                          Int
   equipo_Partido_localToequipo     equipo    @relation("Partido_localToequipo", fields: [local], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_Partido_equipo1")
   equipo_Partido_visitanteToequipo equipo    @relation("Partido_visitanteToequipo", fields: [visitante], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_Partido_equipo2")
@@ -28,11 +28,12 @@ model Partido {
 
 model categoria {
   id            Int             @id @default(autoincrement())
-  descripcion   String?         @db.VarChar(45)
-  ano_inicio    DateTime?       @db.DateTime(0)
-  ano_fin       DateTime?       @db.DateTime(0)
-  timestamp     DateTime?       @default(now()) @db.Timestamp(0)
+  descripcion   String         @db.VarChar(45)
+  ano_inicio    DateTime       @db.DateTime(0)
+  ano_fin       DateTime       @db.DateTime(0)
+  timestamp     DateTime       @default(now()) @db.Timestamp(0)
   novedad_id    Int?
+  juvenil       Int
   novedad       novedad?        @relation(fields: [novedad_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_categoria_novedad1")
   configuracion configuracion[]
   equipo        equipo[]
@@ -45,8 +46,8 @@ model categoria {
 
 model configuracion {
   id           Int       @id @default(autoincrement())
-  descripcion  String?   @db.VarChar(45)
-  habilitado   Int?      @db.TinyInt
+  descripcion  String   @db.VarChar(45)
+  habilitado   Int      @db.TinyInt
   categoria_id Int
   categoria    categoria @relation(fields: [categoria_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_configuracion_categoria1")
 
@@ -55,11 +56,11 @@ model configuracion {
 
 model equipo {
   id                                Int              @id @default(autoincrement())
-  nombre                            String?          @db.VarChar(45)
+  nombre                            String          @db.VarChar(45)
   torneo_id                         Int
   capitan                           Int
   categoria_id                      Int
-  timestamp                         DateTime?        @default(now()) @db.Timestamp(0)
+  timestamp                         DateTime        @default(now()) @db.Timestamp(0)
   zona_id                           Int
   Partido_Partido_localToequipo     Partido[]        @relation("Partido_localToequipo")
   Partido_Partido_visitanteToequipo Partido[]        @relation("Partido_visitanteToequipo")
@@ -79,7 +80,7 @@ model gol {
   id         Int       @id @default(autoincrement())
   jugador_id Int
   Partido_id Int
-  timestamp  DateTime? @default(now()) @db.Timestamp(0)
+  timestamp  DateTime @default(now()) @db.Timestamp(0)
   Partido    Partido   @relation(fields: [Partido_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_gol_Partido1")
   jugador    jugador   @relation(fields: [jugador_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_gol_jugador1")
 
@@ -89,14 +90,14 @@ model gol {
 
 model jugador {
   id               Int                @id @default(autoincrement())
-  dni              String?            @db.VarChar(45)
-  nombre           String?            @db.VarChar(45)
-  apellido         String?            @db.VarChar(45)
-  mail             String?            @db.VarChar(45)
-  telefono         String?            @db.VarChar(45)
-  fecha_nacimiento DateTime?          @db.DateTime(0)
-  timestamp        DateTime?          @default(now()) @db.Timestamp(0)
-  sexo             String?            @db.VarChar(45)
+  dni              String            @db.VarChar(45)
+  nombre           String            @db.VarChar(45)
+  apellido         String            @db.VarChar(45)
+  mail             String            @db.VarChar(45)
+  telefono         String            @db.VarChar(45)
+  fecha_nacimiento DateTime          @db.DateTime(0)
+  timestamp        DateTime          @default(now()) @db.Timestamp(0)
+  sexo             String            @db.VarChar(45)
   categoria_id     Int
   nivel_observado  Int
   equipo           equipo[]
@@ -114,7 +115,7 @@ model jugador {
 model jugador_equipo {
   jugador_id        Int
   equipo_id         Int
-  timestamp         DateTime? @default(now()) @db.Timestamp(0)
+  timestamp         DateTime @default(now()) @db.Timestamp(0)
   jugador_equipo_id Int       @id @default(autoincrement())
   equipo            equipo    @relation(fields: [equipo_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_jugador_equipo_equipo1")
   jugador           jugador   @relation(fields: [jugador_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_jugador_equipo_jugador1")
@@ -125,8 +126,8 @@ model jugador_equipo {
 
 model jugador_infantil {
   id                  Int             @id @default(autoincrement())
-  telefono_emergencia String?         @db.VarChar(45)
-  socio               Int?            @db.TinyInt
+  telefono_emergencia String         @db.VarChar(45)
+  socio               Int            @db.TinyInt
   puesto_id           Int
   nivel_id            Int
   capitan             Int             @db.TinyInt
@@ -135,8 +136,8 @@ model jugador_infantil {
   habilitado          Int             @default(0) @db.TinyInt
   timestamp           DateTime        @default(now()) @db.Timestamp(0)
   jugador_id          Int
-  tercer_hijo         Int?            @db.TinyInt
-  monto_inscripcion   Float?
+  tercer_hijo         Int            @db.TinyInt
+  monto_inscripcion   Float
   torneo              torneo          @relation(fields: [Torneo_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_Inscripto_Torneo1")
   jugador             jugador         @relation(fields: [jugador_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_Inscripto_jugador1")
   nivel               nivel           @relation(fields: [nivel_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_Inscripto_nivel1")
@@ -153,8 +154,8 @@ model jugador_infantil {
 
 model nivel {
   id               Int                @id @default(autoincrement())
-  descripcion      String?            @db.VarChar(45)
-  valor            Int?
+  descripcion      String            @db.VarChar(45)
+  valor            Int
   timestamp        DateTime           @default(now()) @db.Timestamp(0)
   jugador          jugador[]
   jugador_infantil jugador_infantil[]
@@ -162,15 +163,15 @@ model nivel {
 
 model novedad {
   id        Int         @id @default(autoincrement())
-  novedad   String?     @db.LongText
+  novedad   String     @db.LongText
   categoria categoria[]
 }
 
 model pago {
   id             Int             @id @default(autoincrement())
-  transferencia  Int?            @db.TinyInt
+  transferencia  Int             @db.TinyInt
   comprobante    String?         @db.VarChar(45)
-  timestamp      DateTime?       @default(now()) @db.Timestamp(0)
+  timestamp      DateTime       @default(now()) @db.Timestamp(0)
   responsable_id Int
   responsable    responsable     @relation(fields: [responsable_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_pago_responsable1")
   pago_infantil  pago_infantil[]
@@ -191,19 +192,19 @@ model pago_infantil {
 
 model puesto {
   id               Int                @id @default(autoincrement())
-  descripcion      String?            @db.VarChar(45)
-  valor            Int?
-  timestamp        DateTime?          @default(now()) @db.Timestamp(0)
+  descripcion      String            @db.VarChar(45)
+  valor            Int
+  timestamp        DateTime          @default(now()) @db.Timestamp(0)
   jugador_infantil jugador_infantil[]
 }
 
 model responsable {
   id               Int                @id @default(autoincrement())
-  dni              String?            @db.VarChar(8)
-  nombre           String?            @db.VarChar(45)
-  apellido         String?            @db.VarChar(45)
-  mail_contacto    String?            @db.VarChar(45)
-  telefono         String?            @db.VarChar(45)
+  dni              String            @db.VarChar(8)
+  nombre           String            @db.VarChar(45)
+  apellido         String            @db.VarChar(45)
+  mail_contacto    String            @db.VarChar(45)
+  telefono         String            @db.VarChar(45)
   timestamp        DateTime           @default(now()) @db.Timestamp(0)
   jugador_infantil jugador_infantil[]
   pago             pago[]
@@ -215,14 +216,14 @@ model socio {
 
 model tarifas {
   id           Int       @id @default(autoincrement())
-  socio        Int?      @db.TinyInt
-  valor        Int?
-  juvenil      Int?      @db.TinyInt
-  momento      Int?
+  socio        Int      @db.TinyInt
+  valor        Int
+  juvenil      Int      @db.TinyInt
+  momento      Int
   torneo_id    Int
-  fecha_inicio DateTime? @db.DateTime(0)
-  fecha_cierre DateTime? @db.DateTime(0)
-  timestamp    DateTime? @default(now()) @db.Timestamp(0)
+  fecha_inicio DateTime @db.DateTime(0)
+  fecha_cierre DateTime @db.DateTime(0)
+  timestamp    DateTime @default(now()) @db.Timestamp(0)
   torneo       torneo    @relation(fields: [torneo_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_tarifas_torneo1")
 
   @@index([torneo_id], map: "fk_tarifas_torneo1_idx")
@@ -232,8 +233,8 @@ model tarjeta {
   id         Int       @id
   jugador_id Int
   Partido_id Int
-  amarilla   Int?      @db.TinyInt
-  timestamp  DateTime? @default(now()) @db.Timestamp(0)
+  amarilla   Int      @db.TinyInt
+  timestamp  DateTime @default(now()) @db.Timestamp(0)
   Partido    Partido   @relation(fields: [Partido_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_tarjeta_Partido1")
   jugador    jugador   @relation(fields: [jugador_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_tarjeta_jugador1")
 
@@ -259,7 +260,7 @@ model timestamps_1 {
 
 model torneo {
   id               Int                @id @default(autoincrement())
-  ano_torneo       String?            @db.VarChar(4)
+  ano_torneo       String            @db.VarChar(4)
   timestamp        DateTime           @default(now()) @db.Timestamp(0)
   equipo           equipo[]
   jugador_infantil jugador_infantil[]
@@ -268,13 +269,13 @@ model torneo {
 
 model usuario {
   id       Int     @id @default(autoincrement())
-  username String? @db.VarChar(45)
-  password String? @db.VarChar(45)
+  username String @db.VarChar(45)
+  password String @db.VarChar(45)
 }
 
 model zona {
   id           Int       @id @default(autoincrement())
-  descripcion  String?   @db.VarChar(45)
+  descripcion  String   @db.VarChar(45)
   categoria_id Int
   Partido      Partido[]
   equipo       equipo[]

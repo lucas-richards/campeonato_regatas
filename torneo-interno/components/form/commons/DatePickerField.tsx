@@ -9,6 +9,8 @@ interface DatePickerProps {
   name: string;
   control: Control;
   label: string;
+  startDate: Date;
+  endDate: Date;
 }
 
 const DatePickerField = (props: DatePickerProps) => {
@@ -27,6 +29,8 @@ const DatePickerField = (props: DatePickerProps) => {
             disableFuture
             label={props.label}
             inputFormat="DD/MM/YYYY"
+            minDate={props.startDate}
+            maxDate={props.endDate}
             renderInput={(params) => (
               <TextField
                 variant="standard"
