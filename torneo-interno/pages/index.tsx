@@ -1,6 +1,6 @@
 import * as React from "react";
 import { Owner, Player } from "../models/Player";
-import { YouthInscription } from "./api/inscripcion/infantil";
+import { YouthInscription } from "./api/inscription/youth";
 
 export interface IAppProps {}
 

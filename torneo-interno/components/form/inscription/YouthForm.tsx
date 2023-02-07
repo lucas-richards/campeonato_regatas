@@ -20,15 +20,15 @@ interface YouthForm {
 
 const YouthForm = (props: YouthForm) => {
   const positionOptions: RadioOption[] = props.positions.map((el) => {
-    return { label: el.description, value: el.value };
+    return { label: el.description, value: el.value.toString() };
   });
   const levelOptions: RadioOption[] = props.levels.map((el) => {
-    return { label: el.description, value: el.value };
+    return { label: el.description, value: el.value.toString() };
   });
 
   const captainOptions: RadioOption[] = [
-    { label: "No", value: false },
-    { label: "Si", value: true },
+    { label: "No", value: "0" },
+    { label: "Si", value: "1" },
   ];
   return (
     <Grid container rowGap={2} className={classes.box}>

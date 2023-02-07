@@ -23,7 +23,7 @@ export default async function handler(
   res: NextApiResponse<Data>
 ) {
   if (req.method === "POST") {
-    const formulario: YouthInscription = req.body;
+    const formulario: YouthInscription = JSON.parse(req.body);
 
     const inscripcion = await youthInscription(formulario);
 

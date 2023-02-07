@@ -1,14 +1,16 @@
 import React, { useEffect } from "react";
-import { Controller, SubmitHandler, useForm } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import OwnerForm from "./OwnerForm";
-import { Button, Grid, TextField } from "@mui/material";
+import { Button, Grid } from "@mui/material";
 import YouthForm from "./YouthForm";
 import { Category, Level, Position } from "../../../models/Player";
+import { YouthInscription } from "../../../pages/api/inscription/youth";
 
 interface YouthInscriptionFormProps {
   categories: Category[];
   positions: Position[];
   levels: Level[];
+  gender: string;
 }
 
 interface YouthInsriptionFormValues {
@@ -24,9 +26,9 @@ interface YouthInsriptionFormValues {
   playerPhone: string;
   playerBirthdate: Date;
   playerCategory: string;
-  playerPosition?: number;
-  playerLevel?: number;
-  playerCaptain?: boolean;
+  playerPosition: string;
+  playerLevel: string;
+  playerCaptain: string;
 }
 
 const YouthInscriptionForm = (props: YouthInscriptionFormProps) => {
@@ -60,6 +62,9 @@ const YouthInscriptionForm = (props: YouthInscriptionFormProps) => {
     playerPhone: "",
     playerBirthdate: endDate,
     playerCategory: "",
+    playerPosition: "-1",
+    playerLevel: "-1",
+    playerCaptain: "-1",
   };
 
   const {
@@ -81,7 +86,33 @@ const YouthInscriptionForm = (props: YouthInscriptionFormProps) => {
   }, [birthdateWatch]);
 
   const onSubmit = async (data: YouthInsriptionFormValues) => {
-    console.log(data);
+    const incscription: YouthInscription = {
+      emergencyPhone: data.playerPhone,
+      position: +data.playerPosition,
+      level: +data.playerLevel,
+      captain: data.playerCaptain === "0" ? false : true,
+      owner: {
+        dni: data.ownerDni,
+        name: data.ownerName,
+        lastName: data.ownerSurname,
+        email: data.ownerEmail,
+        phone: data.ownerPhone,
+      },
+      player: {
+        dni: data.playerDni,
+        name: data.playerName,
+        lastName: data.playerSurname,
+        email: data.playerEmail,
+        phone: data.playerPhone,
+        birthdate: data.playerBirthdate,
+        gender: props.gender,
+      },
+    };
+
+    const createResponse = await fetch("/api/inscription/youth", {
+      method: "POST",
+      body: JSON.stringify(incscription),
+    });
   };
   return (
     <form onSubmit={handleSubmit(onSubmit)}>

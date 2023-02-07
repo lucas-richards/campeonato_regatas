@@ -1,7 +1,7 @@
 import {
   SeniorInscription,
   YouthInscription,
-} from "../pages/api/inscripcion/infantil";
+} from "../pages/api/inscription/youth";
 import {
   createResponsable,
   getResponsableId,

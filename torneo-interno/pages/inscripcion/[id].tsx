@@ -8,11 +8,13 @@ import { Category, Level, Position } from "../../models/Player";
 import { normalize } from "../../services/db/PrismaClientServer";
 import { getPositions } from "../../services/db/PuestoService";
 import { getLevels } from "../../services/db/NivelService";
+import { GetStaticPaths } from "next";
 
 export interface AppProps {
   categories: Category[];
   positions: Position[];
   levels: Level[];
+  gender: string;
 }
 
 const App = (props: AppProps) => {
@@ -26,6 +28,7 @@ const App = (props: AppProps) => {
           categories={props.categories}
           positions={props.positions}
           levels={props.levels}
+          gender={props.gender}
         />
       </Grid>
     </Grid>
@@ -33,6 +36,20 @@ const App = (props: AppProps) => {
 };
 
 export default App;
+
+export const getStaticPaths: GetStaticPaths = async (ctx) => {
+  return {
+    paths: [
+      {
+        params: { id: "infantil" },
+      },
+      {
+        params: { id: "femenino" },
+      },
+    ],
+    fallback: "blocking",
+  };
+};
 
 export const getStaticProps: GetStaticProps = async (ctx) => {
   const categories: Category[] = await getCategories("M");
@@ -43,6 +60,7 @@ export const getStaticProps: GetStaticProps = async (ctx) => {
       categories: normalize(categories),
       positions,
       levels,
+      gender: ctx.params?.id === "infantil" ? "M" : "F",
     },
   };
 };

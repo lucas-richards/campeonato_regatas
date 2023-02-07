@@ -11,7 +11,7 @@ import {
 
 export interface RadioOption {
   label: string;
-  value: any;
+  value: string;
 }
 
 interface RadioProps {
@@ -22,6 +22,8 @@ interface RadioProps {
   row?: boolean;
 }
 
+const validatePositive = (value: string) => +value >= 0;
+
 const RadioButtonField = (props: RadioProps) => {
   return (
     <Controller
@@ -29,6 +31,7 @@ const RadioButtonField = (props: RadioProps) => {
       name={props.name}
       rules={{
         required: true,
+        validate: validatePositive,
       }}
       render={({ field, fieldState: { invalid, isDirty } }) => (
         <FormControl>
