@@ -1,39 +1,35 @@
 import React, { useState } from "react";
 import Grid from "@mui/material/Grid";
+import { Typography } from "@mui/material";
 import classes from "./FormSection.module.scss";
 import EmailTextfield from "../commons/EmailTextfield";
 import DniTextField from "../commons/DniTextField";
 import NormalTextField from "../commons/NormalTextField";
-import { Typography } from "@mui/material";
 import PhoneTextField from "../commons/PhoneTextField";
 import DatePickerField from "../commons/DatePickerField";
+import RadioButtonField, { RadioOption } from "../commons/RadioButtonField";
+import { Level, Position } from "../../../models/Player";
 
-interface MaleYouthForm {
+interface YouthForm {
   control: any;
   startDate: Date;
   endDate: Date;
+  positions: Position[];
+  levels: Level[];
 }
 
-// const player: Player = {
-//   dni: "1231231",
-//   name: "asasd",
-//   lastName: "12312casdc",
-//   email: "a@a.com",
-//   phone: "12312312344",
-//   birthdate: new Date("05-05-2016"),
-//   gender: "M",
-// };
+const YouthForm = (props: YouthForm) => {
+  const positionOptions: RadioOption[] = props.positions.map((el) => {
+    return { label: el.description, value: el.value };
+  });
+  const levelOptions: RadioOption[] = props.levels.map((el) => {
+    return { label: el.description, value: el.value };
+  });
 
-// const application: YouthInscription = {
-//   emergencyPhone: "1136718735",
-//   position: 1,
-//   level: 2,
-//   owner: owner,
-//   player: player,
-//   captain: true,
-// };
-
-const MaleYouthForm = (props: MaleYouthForm) => {
+  const captainOptions: RadioOption[] = [
+    { label: "No", value: false },
+    { label: "Si", value: true },
+  ];
   return (
     <Grid container rowGap={2} className={classes.box}>
       <Grid item xs={12}>
@@ -86,7 +82,34 @@ const MaleYouthForm = (props: MaleYouthForm) => {
           disabled={true}
         ></NormalTextField>
       </Grid>
+      <Grid item xs={12} pl={1} pr={1} pt={2}>
+        <RadioButtonField
+          name="playerPosition"
+          control={props.control}
+          label="Posición"
+          options={positionOptions}
+          row={true}
+        />
+      </Grid>
+      <Grid item xs={12} pl={1} pr={1} pt={2}>
+        <RadioButtonField
+          name="playerLevel"
+          control={props.control}
+          label="Nivel"
+          options={levelOptions}
+          row={true}
+        />
+      </Grid>
+      <Grid item xs={12} pl={1} pr={1} pt={2}>
+        <RadioButtonField
+          name="playerCaptain"
+          control={props.control}
+          label="Puede ser capitán?"
+          options={captainOptions}
+          row={true}
+        />
+      </Grid>
     </Grid>
   );
 };
-export default MaleYouthForm;
+export default YouthForm;

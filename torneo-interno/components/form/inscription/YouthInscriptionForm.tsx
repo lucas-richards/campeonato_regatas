@@ -2,11 +2,13 @@ import React, { useEffect } from "react";
 import { Controller, SubmitHandler, useForm } from "react-hook-form";
 import OwnerForm from "./OwnerForm";
 import { Button, Grid, TextField } from "@mui/material";
-import MaleYouthForm from "./MaleYouthForm";
-import { Category } from "../../../models/Player";
+import YouthForm from "./YouthForm";
+import { Category, Level, Position } from "../../../models/Player";
 
 interface YouthInscriptionFormProps {
   categories: Category[];
+  positions: Position[];
+  levels: Level[];
 }
 
 interface YouthInsriptionFormValues {
@@ -22,6 +24,9 @@ interface YouthInsriptionFormValues {
   playerPhone: string;
   playerBirthdate: Date;
   playerCategory: string;
+  playerPosition?: number;
+  playerLevel?: number;
+  playerCaptain?: boolean;
 }
 
 const YouthInscriptionForm = (props: YouthInscriptionFormProps) => {
@@ -41,8 +46,6 @@ const YouthInscriptionForm = (props: YouthInscriptionFormProps) => {
   const endDate = categories
     .map((el) => el.endDate)
     .reduce((prev, current) => (prev >= current ? prev : current));
-
-  console.log(startDate, endDate);
 
   const defaultValues: YouthInsriptionFormValues = {
     ownerDni: "",
@@ -87,11 +90,13 @@ const YouthInscriptionForm = (props: YouthInscriptionFormProps) => {
           <OwnerForm control={control}></OwnerForm>
         </Grid>
         <Grid item xs={12}>
-          <MaleYouthForm
+          <YouthForm
             control={control}
             startDate={startDate}
             endDate={endDate}
-          ></MaleYouthForm>
+            positions={props.positions}
+            levels={props.levels}
+          ></YouthForm>
         </Grid>
         <Grid item xs={12}>
           <Button type="submit" disabled={!isValid} variant={"contained"}>
