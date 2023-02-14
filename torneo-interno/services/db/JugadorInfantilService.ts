@@ -1,4 +1,4 @@
-import { jugador_infantil } from "@prisma/client";
+import { jugador_infantil, Prisma } from "@prisma/client";
 import { Player, YouthPlayer } from "../../models/Player";
 import { prismaClient } from "./PrismaClientServer";
 import { toYouthPlayer } from "../../transformers/Player";
@@ -8,6 +8,16 @@ import {
 } from "./CategoriaService";
 
 const client = prismaClient;
+
+const jugadorInfantilIncludes =
+  Prisma.validator<Prisma.jugador_infantilInclude>()({
+    puesto: true,
+    nivel: true,
+    responsable: true,
+    jugador: true,
+    categoria: true,
+    torneo: true,
+  });
 
 export const getAllRegisteredChildren = async (
   owner: number,
@@ -59,23 +69,29 @@ export const createYouthPlayer = async (
   });
 };
 
-export const getAllPlayers: YouthPlayer[] = async (category: string) => {
+export const getAllPlayers = async (
+  category: string
+): Promise<YouthPlayer[]> => {
   const categoryId = await getCategoryIdFromDescription(category);
 
-  const youth: jugador_infantil[] = await client.jugador_infantil.findMany({
+  const youth: Prisma.jugador_infantilGetPayload<{
+    include: typeof jugadorInfantilIncludes;
+  }>[] = await client.jugador_infantil.findMany({
     where: {
       categoria_id: categoryId,
     },
-    include: {
-      puesto: true,
-      nivel: true,
-      responsable: true,
-      jugador: true,
-      categoria: true,
-    },
+    include: jugadorInfantilIncludes,
   });
 
-  console.log(youth);
-
-  return youth.map((el) => toYouthPlayer(el));
+  return youth.map((el) =>
+    toYouthPlayer(
+      el,
+      el.puesto,
+      el.nivel,
+      el.torneo,
+      el.responsable,
+      el.jugador,
+      el.categoria
+    )
+  );
 };
