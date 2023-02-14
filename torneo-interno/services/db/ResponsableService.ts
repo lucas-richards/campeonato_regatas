@@ -3,16 +3,14 @@ import { ID, prismaClient } from "./PrismaClientServer";
 
 const client = prismaClient;
 
-export const getResponsableId = async (
-  dni: string
-): Promise<number | undefined> => {
-  let responsable = await client.responsable.findFirst({
+export const getResponsableId = async (dni: string): Promise<number> => {
+  let responsable = await client.responsable.findFirstOrThrow({
     where: {
       dni,
     },
   });
 
-  return responsable?.id;
+  return responsable.id;
 };
 
 export const createResponsable = async (owner: Owner): Promise<number> => {

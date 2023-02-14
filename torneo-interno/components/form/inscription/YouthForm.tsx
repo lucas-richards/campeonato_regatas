@@ -9,6 +9,7 @@ import PhoneTextField from "../commons/PhoneTextField";
 import DatePickerField from "../commons/DatePickerField";
 import RadioButtonField, { RadioOption } from "../commons/RadioButtonField";
 import { Level, Position } from "../../../models/Player";
+import SelectTextField from "../commons/SelectTextField";
 
 interface YouthForm {
   control: any;
@@ -82,31 +83,28 @@ const YouthForm = (props: YouthForm) => {
           disabled={true}
         ></NormalTextField>
       </Grid>
-      <Grid item xs={12} pl={1} pr={1} pt={2}>
-        <RadioButtonField
+      <Grid item xs={12} sm={6} md={4} pl={1} pr={1}>
+        <SelectTextField
           name="playerPosition"
           control={props.control}
           label="Posición"
           options={positionOptions}
-          row={true}
         />
       </Grid>
-      <Grid item xs={12} pl={1} pr={1} pt={2}>
-        <RadioButtonField
+      <Grid item xs={12} sm={6} md={4} pl={1} pr={1}>
+        <SelectTextField
           name="playerLevel"
           control={props.control}
           label="Nivel"
           options={levelOptions}
-          row={true}
         />
       </Grid>
-      <Grid item xs={12} pl={1} pr={1} pt={2}>
-        <RadioButtonField
+      <Grid item xs={12} sm={6} md={4} pl={1} pr={1}>
+        <SelectTextField
           name="playerCaptain"
           control={props.control}
           label="Puede ser capitán?"
           options={captainOptions}
-          row={true}
         />
       </Grid>
     </Grid>

@@ -1,27 +1,24 @@
 import { Player } from "../../models/Player";
 import { prismaClient } from "./PrismaClientServer";
 import { getCategoryId } from "./CategoriaService";
+import { jugador } from "@prisma/client";
 
 const client = prismaClient;
 
-export const getJugadorId = async (
-  dni: string
-): Promise<number | undefined> => {
-  let jugador = await client.jugador.findFirst({
+export const getJugadorId = async (dni: string): Promise<number> => {
+  let jugador: jugador = await client.jugador.findFirstOrThrow({
     where: {
       dni: dni,
     },
   });
 
-  return jugador?.id;
+  return jugador.id;
 };
 
 export const createJugador = async (
   player: Player,
   level: number
 ): Promise<number> => {
-  const category = await getCategoryId(player.birthdate, player.gender);
-
   await client.jugador.create({
     data: {
       nombre: player.name,
@@ -31,7 +28,6 @@ export const createJugador = async (
       telefono: player.phone,
       fecha_nacimiento: player.birthdate,
       sexo: player.gender,
-      categoria_id: category,
       nivel_observado: level,
     },
   });
@@ -42,8 +38,6 @@ export const createJugador = async (
 };
 
 export const updateJugador = async (id: number, player: Player) => {
-  const category = await getCategoryId(player.birthdate,player.gender);
-
   await client.jugador.update({
     where: {
       id: id,
@@ -56,7 +50,6 @@ export const updateJugador = async (id: number, player: Player) => {
       telefono: player.phone,
       fecha_nacimiento: player.birthdate,
       sexo: player.gender,
-      categoria_id: category,
     },
   });
 };

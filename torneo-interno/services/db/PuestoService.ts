@@ -31,11 +31,11 @@ export const getPosition = async (position: number): Promise<Position> => {
 };
 
 export const getPositionId = async (value: number): Promise<number> => {
-  const puesto = await client.puesto.findFirst({
+  const puesto = await client.puesto.findFirstOrThrow({
     where: {
       valor: value,
     },
   });
 
-  return puesto?.id || 0;
+  return puesto.id;
 };

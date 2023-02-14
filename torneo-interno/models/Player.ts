@@ -32,6 +32,7 @@ export interface YouthPlayer {
   canPlay?: boolean;
   thirdChild?: boolean;
   captain?: boolean;
+  category?: Category;
 }
 
 export interface Category {
@@ -49,6 +50,5 @@ export interface Player {
   phone: string;
   birthdate: Date;
   gender: string;
-  category?: Category;
   realLevel?: Level;
 }

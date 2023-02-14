@@ -5,6 +5,7 @@ import { Button, Grid } from "@mui/material";
 import YouthForm from "./YouthForm";
 import { Category, Level, Position } from "../../../models/Player";
 import { YouthInscription } from "../../../pages/api/inscription/youth";
+import { getRandomNumber, getRandomString } from "../../../services/Random";
 
 interface YouthInscriptionFormProps {
   categories: Category[];

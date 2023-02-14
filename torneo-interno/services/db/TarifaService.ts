@@ -5,7 +5,7 @@ import { isAssociated } from "./SocioService";
 const client = prismaClient;
 
 export const getFee = async (isAssociated: boolean): Promise<number> => {
-  const fee: tarifas | null = await client.tarifas.findFirst({
+  const fee: tarifas | null = await client.tarifas.findFirstOrThrow({
     where: {
       socio: isAssociated ? 1 : 0,
       fecha_inicio: {
@@ -17,5 +17,5 @@ export const getFee = async (isAssociated: boolean): Promise<number> => {
     },
   });
 
-  return fee?.valor || 0;
+  return fee.valor;
 };

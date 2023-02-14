@@ -29,11 +29,11 @@ export const getLevel = async (level: number): Promise<Level> => {
 };
 
 export const getLevelId = async (value: number): Promise<number> => {
-  const nivel = await client.nivel.findFirst({
+  const nivel = await client.nivel.findFirstOrThrow({
     where: {
       valor: value,
     },
   });
 
-  return nivel?.id || 0;
+  return nivel.id;
 };

@@ -1,6 +1,7 @@
 import { Category } from "../../models/Player";
 import { prismaClient } from "./PrismaClientServer";
 import { categoria } from "@prisma/client";
+import { toCategory } from "../../transformers/Player";
 
 const client = prismaClient;
 
@@ -8,7 +9,7 @@ export const getCategory = async (
   birthdate: Date,
   gender: string
 ): Promise<Category> => {
-  const categoria: categoria | null = await client.categoria.findFirst({
+  const categoria: categoria = await client.categoria.findFirstOrThrow({
     where: {
       sexo: gender,
       ano_inicio: {
@@ -19,18 +20,25 @@ export const getCategory = async (
       },
     },
   });
-  return {
-    description: categoria?.descripcion || "",
-    startDate: categoria?.ano_inicio || new Date(),
-    endDate: categoria?.ano_fin || new Date(),
-  };
+  return toCategory(categoria);
 };
 
+export const getCategoryIdFromDescription = async (
+  description: string
+): Promise<number> => {
+  const categoria: categoria = await client.categoria.findFirstOrThrow({
+    where: {
+      descripcion: description,
+    },
+  });
+
+  return categoria.id;
+};
 export const getCategoryId = async (
   birthdate: Date,
   gender: string
 ): Promise<number> => {
-  const categoria: categoria | null = await client.categoria.findFirst({
+  const categoria: categoria = await client.categoria.findFirstOrThrow({
     where: {
       ano_inicio: {
         lte: birthdate,
@@ -41,25 +49,27 @@ export const getCategoryId = async (
     },
   });
 
-  return categoria?.id || 0;
+  return categoria.id;
 };
 
 export const getCategories = async (
   gender: string,
   youth = true
 ): Promise<Category[]> => {
+  interface WhereClause {
+    sexo?: string;
+    juvenil: number;
+  }
+
+  const whereClause: WhereClause = {
+    juvenil: youth ? 0 : 1,
+  };
+
+  if (gender !== "") whereClause.sexo = gender;
+
   const categorias: categoria[] = await client.categoria.findMany({
-    where: {
-      sexo: gender,
-      juvenil: youth ? 0 : 1,
-    },
+    where: whereClause,
   });
 
-  return categorias.map((el) => {
-    return {
-      description: el.descripcion,
-      startDate: el["ano_inicio"],
-      endDate: el["ano_fin"],
-    };
-  });
+  return categorias.map((el) => toCategory(el));
 };

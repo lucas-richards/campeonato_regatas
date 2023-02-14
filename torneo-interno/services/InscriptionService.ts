@@ -24,11 +24,11 @@ import { isAssociated } from "./db/SocioService";
 import { getFee } from "./db/TarifaService";
 
 const nullSafeOwnerId = async (owner: Owner): Promise<number> => {
-  let ownerId = await getResponsableId(owner.dni);
-
-  if (ownerId) {
+  let ownerId;
+  try {
+    ownerId = await getResponsableId(owner.dni);
     await updateResponsable(ownerId, owner);
-  } else {
+  } catch (e) {
     ownerId = await createResponsable(owner);
   }
 
@@ -39,14 +39,13 @@ const nullSafePlayerId = async (
   player: Player,
   level: number
 ): Promise<number> => {
-  let playerId: number | undefined = await getJugadorId(player.dni);
-
-  if (playerId) {
+  let playerId;
+  try {
+    playerId = await getJugadorId(player.dni);
     await updateJugador(playerId, player);
-  } else {
+  } catch (e) {
     playerId = await createJugador(player, level);
   }
-
   return playerId;
 };
 
