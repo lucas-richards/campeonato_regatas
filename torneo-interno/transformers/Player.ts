@@ -19,6 +19,7 @@ import {
 
 export const toCategory = (category: categoria): Category => {
   return {
+    id: category.id,
     description: category.descripcion,
     startDate: category["ano_inicio"],
     endDate: category["ano_fin"],
@@ -87,6 +88,7 @@ export const toYouthPlayer = (
     canPlay: youthPlayer.habilitado === 1,
     thirdChild: youthPlayer.tercer_hijo === 1,
     captain: youthPlayer.capitan === 1,
+    teamId: youthPlayer.equipo_id || undefined,
   };
 
   if (position) youth.position = toPosition(position);

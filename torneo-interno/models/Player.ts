@@ -33,9 +33,11 @@ export interface YouthPlayer {
   thirdChild?: boolean;
   captain?: boolean;
   category?: Category;
+  teamId?: number;
 }
 
 export interface Category {
+  id: number;
   description: string;
   startDate: Date;
   endDate: Date;

@@ -2,10 +2,7 @@ import { jugador_infantil, Prisma } from "@prisma/client";
 import { Player, YouthPlayer } from "../../models/Player";
 import { prismaClient } from "./PrismaClientServer";
 import { toYouthPlayer } from "../../transformers/Player";
-import {
-  getCategoryIdFromDescription,
-  getCategoryId,
-} from "./CategoriaService";
+import { getCategoryId } from "./CategoriaService";
 
 const client = prismaClient;
 
@@ -70,15 +67,15 @@ export const createYouthPlayer = async (
 };
 
 export const getAllPlayers = async (
-  category: string
+  categoryId: number,
+  tournamentId: number
 ): Promise<YouthPlayer[]> => {
-  const categoryId = await getCategoryIdFromDescription(category);
-
   const youth: Prisma.jugador_infantilGetPayload<{
     include: typeof jugadorInfantilIncludes;
   }>[] = await client.jugador_infantil.findMany({
     where: {
       categoria_id: categoryId,
+      Torneo_id: tournamentId,
     },
     include: jugadorInfantilIncludes,
   });

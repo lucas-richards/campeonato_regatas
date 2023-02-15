@@ -23,21 +23,21 @@ export const getCategory = async (
   return toCategory(categoria);
 };
 
-export const getCategoryIdFromDescription = async (
+export const getCategoryFromDescription = async (
   description: string
-): Promise<number> => {
+): Promise<Category> => {
   const categoria: categoria = await client.categoria.findFirstOrThrow({
     where: {
       descripcion: description,
     },
   });
 
-  return categoria.id;
+  return toCategory(categoria);
 };
 export const getCategoryId = async (
   birthdate: Date,
   gender: string
-): Promise<number> => {
+): Promise<Category> => {
   const categoria: categoria = await client.categoria.findFirstOrThrow({
     where: {
       ano_inicio: {
@@ -49,7 +49,7 @@ export const getCategoryId = async (
     },
   });
 
-  return categoria.id;
+  return toCategory(categoria);
 };
 
 export const getCategories = async (
