@@ -78,13 +78,15 @@ model equipo {
 }
 
 model gol {
-  id               Int                @id @default(autoincrement())
-  Partido_id       Int
-  timestamp        DateTime           @default(now()) @db.Timestamp(0)
-  Partido          Partido            @relation(fields: [Partido_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_gol_Partido1")
-  jugador_infantil jugador_infantil[]
+  id                  Int              @id @default(autoincrement())
+  Partido_id          Int
+  timestamp           DateTime         @default(now()) @db.Timestamp(0)
+  jugador_infantil_id Int
+  Partido             Partido          @relation(fields: [Partido_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_gol_Partido1")
+  jugador_infantil    jugador_infantil @relation(fields: [jugador_infantil_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_gol_jugador_infantil1")
 
   @@index([Partido_id], map: "fk_gol_Partido1_idx")
+  @@index([jugador_infantil_id], map: "fk_gol_jugador_infantil1_idx")
 }
 
 model jugador {
@@ -119,7 +121,7 @@ model jugador_equipo {
 }
 
 model jugador_infantil {
-  id                  Int              @id @unique(map: "id_UNIQUE")
+  id                  Int              @id @default(autoincrement())
   telefono_emergencia String           @db.VarChar(45)
   socio               Int              @db.TinyInt
   puesto_id           Int
@@ -134,7 +136,7 @@ model jugador_infantil {
   monto_inscripcion   Float            @db.Float
   categoria_id        Int
   equipo_id           Int?
-  gol_id              Int
+  gol                 gol[]
   jugador_equipo      jugador_equipo[]
   torneo              torneo           @relation(fields: [Torneo_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_Inscripto_Torneo1")
   jugador             jugador          @relation(fields: [jugador_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_Inscripto_jugador1")
@@ -143,7 +145,6 @@ model jugador_infantil {
   responsable         responsable      @relation(fields: [responsable_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_Inscripto_responsable1")
   categoria           categoria        @relation(fields: [categoria_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_jugador_infantil_categoria1")
   equipo              equipo?          @relation(fields: [equipo_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_jugador_infantil_equipo1")
-  gol                 gol              @relation(fields: [gol_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_jugador_infantil_gol1")
   pago_infantil       pago_infantil[]
 
   @@index([Torneo_id], map: "fk_Inscripto_Torneo1_idx")
@@ -153,7 +154,6 @@ model jugador_infantil {
   @@index([responsable_id], map: "fk_Inscripto_responsable1_idx")
   @@index([categoria_id], map: "fk_jugador_infantil_categoria1_idx")
   @@index([equipo_id], map: "fk_jugador_infantil_equipo1_idx")
-  @@index([gol_id], map: "fk_jugador_infantil_gol1_idx")
 }
 
 model nivel {

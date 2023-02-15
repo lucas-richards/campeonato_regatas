@@ -63,9 +63,9 @@ const YouthInscriptionForm = (props: YouthInscriptionFormProps) => {
     playerPhone: "",
     playerBirthdate: endDate,
     playerCategory: "",
-    playerPosition: "-1",
-    playerLevel: "-1",
-    playerCaptain: "-1",
+    playerPosition: "",
+    playerLevel: "",
+    playerCaptain: "",
   };
 
   const {
