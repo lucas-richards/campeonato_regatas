@@ -74,7 +74,7 @@ export const createYouthPlayer = async (
       jugador_id: playerId,
       tercer_hijo: thirdSon ? 1 : 0,
       monto_inscripcion: fee,
-      categoria_id: category,
+      categoria_id: category.id,
     },
   });
 };
