@@ -23,17 +23,17 @@ export interface Owner {
 
 export interface YouthPlayer {
   emergencyPhone: string;
-  member?: boolean;
-  position?: Position;
-  level?: Level;
-  tournament?: Tournament;
-  owner?: Owner;
-  player?: Player;
-  canPlay?: boolean;
-  thirdChild?: boolean;
-  captain?: boolean;
-  category?: Category;
-  teamId?: number;
+  member: boolean;
+  position: Position;
+  level: Level;
+  tournament: Tournament;
+  owner: Owner;
+  player: Player;
+  canPlay: boolean;
+  thirdChild: boolean;
+  captain: boolean;
+  category: Category;
+  teamId: number;
 }
 
 export interface Category {
@@ -53,4 +53,13 @@ export interface Player {
   birthdate: Date;
   gender: string;
   realLevel?: Level;
+}
+
+export interface Child {
+  dni: string;
+  name: string;
+  lastName: string;
+  category: string;
+  canPlay: boolean;
+  fee: number;
 }

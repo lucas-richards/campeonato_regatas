@@ -4,9 +4,9 @@ import { toTeam } from "../../transformers/Team";
 
 const client = prismaClient;
 
-const teamIncludes = Prisma.validator<Prisma.jugador_infantilInclude>()({
+const teamIncludes = Prisma.validator<Prisma.equipoInclude>()({
   categoria: true,
-  jugador: true,
+  jugador_infantil_equipo_capitanTojugador_infantil: true,
   torneo: true,
 });
 
@@ -21,5 +21,5 @@ export const getTeams = async (category: number, tournament: number) => {
     include: teamIncludes,
   });
 
-  return teams.map((el) => toTeam(el, el.jugador, el.categoria, el.torneo));
+  return teams.map((el) => toTeam(el, el.categoria, el.torneo));
 };

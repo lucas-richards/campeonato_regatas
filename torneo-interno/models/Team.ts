@@ -4,14 +4,15 @@ export interface TeamPlayer {
   dni: string;
   name: string;
   lastName: string;
-  position?: Position;
-  level?: Level;
+  position: Position;
+  level: Level;
+  canBeCaptain: boolean;
 }
 
 export interface Team {
-  id: number;
+  id?: number;
   name: string;
-  captain?: Player;
+  captain?: TeamPlayer;
   category: Category;
   tournament: Tournament;
   players?: TeamPlayer[];

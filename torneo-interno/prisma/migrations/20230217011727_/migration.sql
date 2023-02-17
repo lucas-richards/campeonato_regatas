@@ -1,20 +1,4 @@
 -- CreateTable
-CREATE TABLE `Partido` (
-    `id` INTEGER NOT NULL AUTO_INCREMENT,
-    `gol_local` INTEGER NOT NULL,
-    `gol_visitante` INTEGER NOT NULL,
-    `local` INTEGER NOT NULL,
-    `visitante` INTEGER NOT NULL,
-    `timestamp` DATETIME(0) NOT NULL DEFAULT CURRENT_TIMESTAMP(0),
-    `zona_id` INTEGER NOT NULL,
-
-    INDEX `fk_Partido_equipo1_idx`(`local`),
-    INDEX `fk_Partido_equipo2_idx`(`visitante`),
-    INDEX `fk_Partido_zona1_idx`(`zona_id`),
-    PRIMARY KEY (`id`)
-) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
-
--- CreateTable
 CREATE TABLE `categoria` (
     `id` INTEGER NOT NULL AUTO_INCREMENT,
     `descripcion` VARCHAR(45) NOT NULL,
@@ -45,27 +29,14 @@ CREATE TABLE `equipo` (
     `id` INTEGER NOT NULL AUTO_INCREMENT,
     `nombre` VARCHAR(45) NOT NULL,
     `torneo_id` INTEGER NOT NULL,
-    `capitan` INTEGER NOT NULL,
     `categoria_id` INTEGER NOT NULL,
     `timestamp` TIMESTAMP(0) NOT NULL DEFAULT CURRENT_TIMESTAMP(0),
     `zona_id` INTEGER NOT NULL,
+    `capitan` INTEGER NOT NULL,
 
     INDEX `fk_equipo_categoria1_idx`(`categoria_id`),
-    INDEX `fk_equipo_jugador1_idx`(`capitan`),
+    INDEX `fk_equipo_jugador_infantil1_idx`(`capitan`),
     INDEX `fk_equipo_torneo1_idx`(`torneo_id`),
-    INDEX `fk_equipo_zona1_idx`(`zona_id`),
-    PRIMARY KEY (`id`)
-) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
-
--- CreateTable
-CREATE TABLE `gol` (
-    `id` INTEGER NOT NULL AUTO_INCREMENT,
-    `Partido_id` INTEGER NOT NULL,
-    `timestamp` TIMESTAMP(0) NOT NULL DEFAULT CURRENT_TIMESTAMP(0),
-    `jugador_infantil_id` INTEGER NOT NULL,
-
-    INDEX `fk_gol_Partido1_idx`(`Partido_id`),
-    INDEX `fk_gol_jugador_infantil1_idx`(`jugador_infantil_id`),
     PRIMARY KEY (`id`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
@@ -215,19 +186,6 @@ CREATE TABLE `tarifas` (
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 -- CreateTable
-CREATE TABLE `tarjeta` (
-    `id` INTEGER NOT NULL,
-    `jugador_id` INTEGER NOT NULL,
-    `Partido_id` INTEGER NOT NULL,
-    `amarilla` TINYINT NOT NULL,
-    `timestamp` TIMESTAMP(0) NOT NULL DEFAULT CURRENT_TIMESTAMP(0),
-
-    INDEX `fk_tarjeta_Partido1_idx`(`Partido_id`),
-    INDEX `fk_tarjeta_jugador1_idx`(`jugador_id`),
-    PRIMARY KEY (`id`)
-) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
-
--- CreateTable
 CREATE TABLE `timestamps` (
     `create_time` TIMESTAMP(0) NULL DEFAULT CURRENT_TIMESTAMP(0),
     `update_time` TIMESTAMP(0) NULL
@@ -257,25 +215,6 @@ CREATE TABLE `usuario` (
     PRIMARY KEY (`id`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
--- CreateTable
-CREATE TABLE `zona` (
-    `id` INTEGER NOT NULL AUTO_INCREMENT,
-    `descripcion` VARCHAR(45) NOT NULL,
-    `categoria_id` INTEGER NOT NULL,
-
-    INDEX `fk_zona_categoria1_idx`(`categoria_id`),
-    PRIMARY KEY (`id`)
-) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
-
--- AddForeignKey
-ALTER TABLE `Partido` ADD CONSTRAINT `fk_Partido_equipo1` FOREIGN KEY (`local`) REFERENCES `equipo`(`id`) ON DELETE NO ACTION ON UPDATE NO ACTION;
-
--- AddForeignKey
-ALTER TABLE `Partido` ADD CONSTRAINT `fk_Partido_equipo2` FOREIGN KEY (`visitante`) REFERENCES `equipo`(`id`) ON DELETE NO ACTION ON UPDATE NO ACTION;
-
--- AddForeignKey
-ALTER TABLE `Partido` ADD CONSTRAINT `fk_Partido_zona1` FOREIGN KEY (`zona_id`) REFERENCES `zona`(`id`) ON DELETE NO ACTION ON UPDATE NO ACTION;
-
 -- AddForeignKey
 ALTER TABLE `categoria` ADD CONSTRAINT `fk_categoria_novedad1` FOREIGN KEY (`novedad_id`) REFERENCES `novedad`(`id`) ON DELETE NO ACTION ON UPDATE NO ACTION;
 
@@ -286,19 +225,10 @@ ALTER TABLE `configuracion` ADD CONSTRAINT `fk_configuracion_categoria1` FOREIGN
 ALTER TABLE `equipo` ADD CONSTRAINT `fk_equipo_categoria1` FOREIGN KEY (`categoria_id`) REFERENCES `categoria`(`id`) ON DELETE NO ACTION ON UPDATE NO ACTION;
 
 -- AddForeignKey
-ALTER TABLE `equipo` ADD CONSTRAINT `fk_equipo_jugador1` FOREIGN KEY (`capitan`) REFERENCES `jugador`(`id`) ON DELETE NO ACTION ON UPDATE NO ACTION;
+ALTER TABLE `equipo` ADD CONSTRAINT `fk_equipo_jugador_infantil1` FOREIGN KEY (`capitan`) REFERENCES `jugador_infantil`(`id`) ON DELETE NO ACTION ON UPDATE NO ACTION;
 
 -- AddForeignKey
 ALTER TABLE `equipo` ADD CONSTRAINT `fk_equipo_torneo1` FOREIGN KEY (`torneo_id`) REFERENCES `torneo`(`id`) ON DELETE NO ACTION ON UPDATE NO ACTION;
-
--- AddForeignKey
-ALTER TABLE `equipo` ADD CONSTRAINT `fk_equipo_zona1` FOREIGN KEY (`zona_id`) REFERENCES `zona`(`id`) ON DELETE NO ACTION ON UPDATE NO ACTION;
-
--- AddForeignKey
-ALTER TABLE `gol` ADD CONSTRAINT `fk_gol_Partido1` FOREIGN KEY (`Partido_id`) REFERENCES `Partido`(`id`) ON DELETE NO ACTION ON UPDATE NO ACTION;
-
--- AddForeignKey
-ALTER TABLE `gol` ADD CONSTRAINT `fk_gol_jugador_infantil1` FOREIGN KEY (`jugador_infantil_id`) REFERENCES `jugador_infantil`(`id`) ON DELETE NO ACTION ON UPDATE NO ACTION;
 
 -- AddForeignKey
 ALTER TABLE `jugador` ADD CONSTRAINT `fk_jugador_nivel1` FOREIGN KEY (`nivel_observado`) REFERENCES `nivel`(`id`) ON DELETE NO ACTION ON UPDATE NO ACTION;
@@ -341,15 +271,6 @@ ALTER TABLE `pago_infantil` ADD CONSTRAINT `fk_pago_infantil_pago1` FOREIGN KEY 
 
 -- AddForeignKey
 ALTER TABLE `tarifas` ADD CONSTRAINT `fk_tarifas_torneo1` FOREIGN KEY (`torneo_id`) REFERENCES `torneo`(`id`) ON DELETE NO ACTION ON UPDATE NO ACTION;
-
--- AddForeignKey
-ALTER TABLE `tarjeta` ADD CONSTRAINT `fk_tarjeta_Partido1` FOREIGN KEY (`Partido_id`) REFERENCES `Partido`(`id`) ON DELETE NO ACTION ON UPDATE NO ACTION;
-
--- AddForeignKey
-ALTER TABLE `tarjeta` ADD CONSTRAINT `fk_tarjeta_jugador1` FOREIGN KEY (`jugador_id`) REFERENCES `jugador`(`id`) ON DELETE NO ACTION ON UPDATE NO ACTION;
-
--- AddForeignKey
-ALTER TABLE `zona` ADD CONSTRAINT `fk_zona_categoria1` FOREIGN KEY (`categoria_id`) REFERENCES `categoria`(`id`) ON DELETE NO ACTION ON UPDATE NO ACTION;
 
 -- -----------------------------------------------------
 -- Data for table `categoria`
@@ -394,14 +315,13 @@ INSERT INTO `puesto` (`id`, `descripcion`, `valor`, `timestamp`) VALUES (DEFAULT
 INSERT INTO `puesto` (`id`, `descripcion`, `valor`, `timestamp`) VALUES (DEFAULT, 'Delantero', 4, DEFAULT);
 
 COMMIT;
+
 -- -----------------------------------------------------
 -- Data for table `torneo`
 -- -----------------------------------------------------
 START TRANSACTION;
 INSERT INTO `torneo` (`id`, `ano_torneo`, `timestamp`) VALUES (DEFAULT, '2023', DEFAULT);
-
 COMMIT;
-
 -- -----------------------------------------------------
 -- Data for table `tarifas`
 -- -----------------------------------------------------
@@ -410,3 +330,6 @@ INSERT INTO `tarifas` (`id`, `socio`, `valor`, `juvenil`, `momento`, `torneo_id`
 INSERT INTO `tarifas` (`id`, `socio`, `valor`, `juvenil`, `momento`, `torneo_id`, `fecha_inicio`, `fecha_cierre`, `timestamp`) VALUES (DEFAULT, 0, 20000, 0, 1, 1, '2023-02-10 09:00:00', '2023-06-10 09:00:00', '2023-02-13 22:20:55');
 
 COMMIT;
+
+
+

@@ -1,5 +1,5 @@
 import { jugador_infantil, Prisma } from "@prisma/client";
-import { Player, YouthPlayer } from "../../models/Player";
+import { Child, Player, YouthPlayer } from "../../models/Player";
 import { prismaClient } from "./PrismaClientServer";
 import { toYouthPlayer } from "../../transformers/Player";
 import { getCategoryId } from "./CategoriaService";
@@ -19,18 +19,31 @@ const jugadorInfantilIncludes =
 export const getAllRegisteredChildren = async (
   owner: number,
   tournament: number
-): Promise<YouthPlayer[]> => {
-  const children: jugador_infantil[] = await client.jugador_infantil.findMany({
+): Promise<Child[]> => {
+  const children: Prisma.jugador_infantilGetPayload<{
+    include: {
+      categoria: true;
+      jugador: true;
+    };
+  }>[] = await client.jugador_infantil.findMany({
     where: {
       Torneo_id: tournament,
       responsable_id: owner,
+    },
+    include: {
+      categoria: true,
+      jugador: true,
     },
   });
 
   return children.map((el) => {
     return {
-      emergencyPhone: el.telefono_emergencia,
+      dni: el.jugador.dni,
+      name: el.jugador.nombre,
+      lastName: el.jugador.apellido,
+      category: el.categoria.descripcion,
       canPlay: el.habilitado === 1,
+      fee: el.monto_inscripcion,
     };
   });
 };

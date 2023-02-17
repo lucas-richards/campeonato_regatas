@@ -7,25 +7,6 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model Partido {
-  id                               Int       @id @default(autoincrement())
-  gol_local                        Int
-  gol_visitante                    Int
-  local                            Int
-  visitante                        Int
-  timestamp                        DateTime  @default(now()) @db.DateTime(0)
-  zona_id                          Int
-  equipo_Partido_localToequipo     equipo    @relation("Partido_localToequipo", fields: [local], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_Partido_equipo1")
-  equipo_Partido_visitanteToequipo equipo    @relation("Partido_visitanteToequipo", fields: [visitante], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_Partido_equipo2")
-  zona                             zona      @relation(fields: [zona_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_Partido_zona1")
-  gol                              gol[]
-  tarjeta                          tarjeta[]
-
-  @@index([local], map: "fk_Partido_equipo1_idx")
-  @@index([visitante], map: "fk_Partido_equipo2_idx")
-  @@index([zona_id], map: "fk_Partido_zona1_idx")
-}
-
 model categoria {
   id               Int                @id @default(autoincrement())
   descripcion      String             @db.VarChar(45)
@@ -39,7 +20,6 @@ model categoria {
   configuracion    configuracion[]
   equipo           equipo[]
   jugador_infantil jugador_infantil[]
-  zona             zona[]
 
   @@index([novedad_id], map: "fk_categoria_novedad1_idx")
 }
@@ -55,38 +35,22 @@ model configuracion {
 }
 
 model equipo {
-  id                                Int                @id @default(autoincrement())
-  nombre                            String             @db.VarChar(45)
-  torneo_id                         Int
-  capitan                           Int
-  categoria_id                      Int
-  timestamp                         DateTime           @default(now()) @db.Timestamp(0)
-  zona_id                           Int
-  Partido_Partido_localToequipo     Partido[]          @relation("Partido_localToequipo")
-  Partido_Partido_visitanteToequipo Partido[]          @relation("Partido_visitanteToequipo")
-  categoria                         categoria          @relation(fields: [categoria_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_equipo_categoria1")
-  jugador                           jugador            @relation(fields: [capitan], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_equipo_jugador1")
-  torneo                            torneo             @relation(fields: [torneo_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_equipo_torneo1")
-  zona                              zona               @relation(fields: [zona_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_equipo_zona1")
-  jugador_equipo                    jugador_equipo[]
-  jugador_infantil                  jugador_infantil[]
+  id                                                  Int                @id @default(autoincrement())
+  nombre                                              String             @db.VarChar(45)
+  torneo_id                                           Int
+  categoria_id                                        Int
+  timestamp                                           DateTime           @default(now()) @db.Timestamp(0)
+  zona_id                                             Int
+  capitan                                             Int
+  categoria                                           categoria          @relation(fields: [categoria_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_equipo_categoria1")
+  jugador_infantil_equipo_capitanTojugador_infantil   jugador_infantil   @relation("equipo_capitanTojugador_infantil", fields: [capitan], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_equipo_jugador_infantil1")
+  torneo                                              torneo             @relation(fields: [torneo_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_equipo_torneo1")
+  jugador_equipo                                      jugador_equipo[]
+  jugador_infantil_jugador_infantil_equipo_idToequipo jugador_infantil[] @relation("jugador_infantil_equipo_idToequipo")
 
   @@index([categoria_id], map: "fk_equipo_categoria1_idx")
-  @@index([capitan], map: "fk_equipo_jugador1_idx")
+  @@index([capitan], map: "fk_equipo_jugador_infantil1_idx")
   @@index([torneo_id], map: "fk_equipo_torneo1_idx")
-  @@index([zona_id], map: "fk_equipo_zona1_idx")
-}
-
-model gol {
-  id                  Int              @id @default(autoincrement())
-  Partido_id          Int
-  timestamp           DateTime         @default(now()) @db.Timestamp(0)
-  jugador_infantil_id Int
-  Partido             Partido          @relation(fields: [Partido_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_gol_Partido1")
-  jugador_infantil    jugador_infantil @relation(fields: [jugador_infantil_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_gol_jugador_infantil1")
-
-  @@index([Partido_id], map: "fk_gol_Partido1_idx")
-  @@index([jugador_infantil_id], map: "fk_gol_jugador_infantil1_idx")
 }
 
 model jugador {
@@ -100,10 +64,8 @@ model jugador {
   timestamp        DateTime           @default(now()) @db.Timestamp(0)
   sexo             String             @db.VarChar(45)
   nivel_observado  Int?
-  equipo           equipo[]
   nivel            nivel?             @relation(fields: [nivel_observado], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_jugador_nivel1")
   jugador_infantil jugador_infantil[]
-  tarjeta          tarjeta[]
 
   @@index([nivel_observado], map: "fk_jugador_nivel1_idx")
 }
@@ -121,31 +83,31 @@ model jugador_equipo {
 }
 
 model jugador_infantil {
-  id                  Int              @id @default(autoincrement())
-  telefono_emergencia String           @db.VarChar(45)
-  socio               Int              @db.TinyInt
-  puesto_id           Int
-  nivel_id            Int
-  capitan             Int              @db.TinyInt
-  Torneo_id           Int
-  responsable_id      Int
-  habilitado          Int              @default(0) @db.TinyInt
-  timestamp           DateTime         @default(now()) @db.Timestamp(0)
-  jugador_id          Int
-  tercer_hijo         Int              @db.TinyInt
-  monto_inscripcion   Float            @db.Float
-  categoria_id        Int
-  equipo_id           Int?
-  gol                 gol[]
-  jugador_equipo      jugador_equipo[]
-  torneo              torneo           @relation(fields: [Torneo_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_Inscripto_Torneo1")
-  jugador             jugador          @relation(fields: [jugador_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_Inscripto_jugador1")
-  nivel               nivel            @relation(fields: [nivel_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_Inscripto_nivel1")
-  puesto              puesto           @relation(fields: [puesto_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_Inscripto_puesto")
-  responsable         responsable      @relation(fields: [responsable_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_Inscripto_responsable1")
-  categoria           categoria        @relation(fields: [categoria_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_jugador_infantil_categoria1")
-  equipo              equipo?          @relation(fields: [equipo_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_jugador_infantil_equipo1")
-  pago_infantil       pago_infantil[]
+  id                                        Int              @id @default(autoincrement())
+  telefono_emergencia                       String           @db.VarChar(45)
+  socio                                     Int              @db.TinyInt
+  puesto_id                                 Int
+  nivel_id                                  Int
+  capitan                                   Int              @db.TinyInt
+  Torneo_id                                 Int
+  responsable_id                            Int
+  habilitado                                Int              @default(0) @db.TinyInt
+  timestamp                                 DateTime         @default(now()) @db.Timestamp(0)
+  jugador_id                                Int
+  tercer_hijo                               Int              @db.TinyInt
+  monto_inscripcion                         Float            @db.Float
+  categoria_id                              Int
+  equipo_id                                 Int?
+  equipo_equipo_capitanTojugador_infantil   equipo[]         @relation("equipo_capitanTojugador_infantil")
+  jugador_equipo                            jugador_equipo[]
+  torneo                                    torneo           @relation(fields: [Torneo_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_Inscripto_Torneo1")
+  jugador                                   jugador          @relation(fields: [jugador_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_Inscripto_jugador1")
+  nivel                                     nivel            @relation(fields: [nivel_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_Inscripto_nivel1")
+  puesto                                    puesto           @relation(fields: [puesto_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_Inscripto_puesto")
+  responsable                               responsable      @relation(fields: [responsable_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_Inscripto_responsable1")
+  categoria                                 categoria        @relation(fields: [categoria_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_jugador_infantil_categoria1")
+  equipo_jugador_infantil_equipo_idToequipo equipo?          @relation("jugador_infantil_equipo_idToequipo", fields: [equipo_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_jugador_infantil_equipo1")
+  pago_infantil                             pago_infantil[]
 
   @@index([Torneo_id], map: "fk_Inscripto_Torneo1_idx")
   @@index([jugador_id], map: "fk_Inscripto_jugador1_idx")
@@ -233,19 +195,6 @@ model tarifas {
   @@index([torneo_id], map: "fk_tarifas_torneo1_idx")
 }
 
-model tarjeta {
-  id         Int      @id
-  jugador_id Int
-  Partido_id Int
-  amarilla   Int      @db.TinyInt
-  timestamp  DateTime @default(now()) @db.Timestamp(0)
-  Partido    Partido  @relation(fields: [Partido_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_tarjeta_Partido1")
-  jugador    jugador  @relation(fields: [jugador_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_tarjeta_jugador1")
-
-  @@index([Partido_id], map: "fk_tarjeta_Partido1_idx")
-  @@index([jugador_id], map: "fk_tarjeta_jugador1_idx")
-}
-
 /// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by the Prisma Client.
 model timestamps {
   create_time DateTime? @default(now()) @db.Timestamp(0)
@@ -275,15 +224,4 @@ model usuario {
   id       Int     @id @default(autoincrement())
   username String? @db.VarChar(45)
   password String? @db.VarChar(45)
-}
-
-model zona {
-  id           Int       @id @default(autoincrement())
-  descripcion  String    @db.VarChar(45)
-  categoria_id Int
-  Partido      Partido[]
-  equipo       equipo[]
-  categoria    categoria @relation(fields: [categoria_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_zona_categoria1")
-
-  @@index([categoria_id], map: "fk_zona_categoria1_idx")
 }
