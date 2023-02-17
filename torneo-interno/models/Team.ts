@@ -22,3 +22,9 @@ export interface TeamCreationsView {
   teams: Team[];
   noTeam: TeamPlayer[];
 }
+
+export interface TeamView {
+  name?: string;
+  players: TeamPlayer[];
+  captain: TeamPlayer | null;
+}
