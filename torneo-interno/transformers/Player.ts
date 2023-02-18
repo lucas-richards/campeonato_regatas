@@ -30,13 +30,15 @@ export const toPosition = (position: puesto): Position => {
   return {
     description: position.descripcion,
     value: position.valor,
+    symbol: position.simbolo,
   };
 };
 
-export const toLevel = (position: nivel): Level => {
+export const toLevel = (level: nivel): Level => {
   return {
-    description: position.descripcion,
-    value: position.valor,
+    description: level.descripcion,
+    value: level.valor,
+    symbol: level.simbolo,
   };
 };
 

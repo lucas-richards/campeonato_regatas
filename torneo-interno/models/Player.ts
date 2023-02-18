@@ -6,11 +6,13 @@ export interface Tournament {
 export interface Level {
   description: string;
   value: number;
+  symbol: string;
 }
 
 export interface Position {
   description: string;
   value: number;
+  symbol: string;
 }
 
 export interface Owner {

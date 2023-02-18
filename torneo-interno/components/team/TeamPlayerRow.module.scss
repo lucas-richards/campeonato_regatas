@@ -1,0 +1,22 @@
+.player {
+  background: rgba(0, 0, 0, 0.05);
+
+  & > * {
+    padding: 2px 0;
+  }
+}
+
+.goalkeeper {
+  background-color: #52b202;
+}
+
+.defender {
+  background-color: #007bb2;
+}
+
+.midfielder {
+  background-color: #b26a00;
+}
+.forward {
+  background-color: #aa2e25;
+}

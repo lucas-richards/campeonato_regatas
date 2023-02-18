@@ -123,6 +123,7 @@ model nivel {
   descripcion      String             @db.VarChar(45)
   valor            Int
   timestamp        DateTime           @default(now()) @db.Timestamp(0)
+  simbolo          String             @db.VarChar(5)
   jugador          jugador[]
   jugador_infantil jugador_infantil[]
 }
@@ -161,6 +162,7 @@ model puesto {
   descripcion      String             @db.VarChar(45)
   valor            Int
   timestamp        DateTime           @default(now()) @db.Timestamp(0)
+  simbolo          String             @db.VarChar(3)
   jugador_infantil jugador_infantil[]
 }
 

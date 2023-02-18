@@ -23,32 +23,33 @@ export const getRandomNumber = (length: number) => {
 };
 
 // for (let i = 0; i < 100; i++) {
-//       let incscription: YouthInscription = {
-//         emergencyPhone: getRandomNumber(10),
-//         position: Math.ceil(Math.random() * 4),
-//         level: Math.ceil(Math.random() * 5),
-//         captain: Math.ceil(Math.random() * 1) === 0 ? false : true,
-//         owner: {
-//           dni: getRandomNumber(8),
-//           name: getRandomString(5),
-//           lastName: getRandomString(5),
-//           email: getRandomString(5) + "@" + getRandomString(5) + ".com",
-//           phone: getRandomNumber(10),
-//         },
-//         player: {
-//           dni: getRandomNumber(8),
-//           name: getRandomString(5),
-//           lastName: getRandomString(5),
-//           email: getRandomString(5) + "@" + getRandomString(5) + ".com",
-//           phone: getRandomNumber(10),
-//           birthdate: new Date("02-02-2017"),
-//           gender: "M",
-//         },
-//       };
-
-//       const createResponse = await fetch("/api/inscription/youth", {
-//         method: "POST",
-//         body: JSON.stringify(incscription),
-//       });
-//     }
+//   let incscription: YouthInscription = {
+//     emergencyPhone: getRandomNumber(10),
+//     position: Math.ceil(Math.random() * 4),
+//     level: Math.ceil(Math.random() * 5),
+//     captain: Math.ceil(Math.random() * 1) === 0 ? false : true,
+//     owner: {
+//       dni: getRandomNumber(8),
+//       name: getRandomString(Math.ceil(Math.random() * 10)),
+//       lastName: getRandomString(Math.ceil(Math.random() * 10)),
+//       email:
+//         getRandomString(Math.ceil(Math.random() * 10)) +
+//         "@" +
+//         getRandomString(5) +
+//         ".com",
+//       phone: getRandomNumber(10),
+//     },
+//     player: {
+//       dni: getRandomNumber(8),
+//       name: getRandomString(Math.ceil(Math.random() * 10)),
+//       lastName: getRandomString(Math.ceil(Math.random() * 10)),
+//       email:
+//         getRandomString(Math.ceil(Math.random() * 10)) +
+//         "@" +
+//         getRandomString(5) +
+//         ".com",
+//       phone: getRandomNumber(10),
+//       birthdate: new Date("02-02-2017"),
+//       gender: "M",
+//     },
 //   };

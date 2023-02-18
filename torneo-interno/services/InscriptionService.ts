@@ -14,7 +14,13 @@ import {
   getJugadorId,
   updateJugador,
 } from "./db/JugadorService";
-import { Owner, Player, Tournament, YouthPlayer } from "../models/Player";
+import {
+  Child,
+  Owner,
+  Player,
+  Tournament,
+  YouthPlayer,
+} from "../models/Player";
 import { getActiveTournament } from "./db/TorneoService";
 import {
   createYouthPlayer,
@@ -64,7 +70,7 @@ export const youthInscription = async (
 
   const tournament: Tournament = await getActiveTournament();
 
-  const otherPlayers: YouthPlayer[] = await getAllRegisteredChildren(
+  const otherPlayers: Child[] = await getAllRegisteredChildren(
     ownerId,
     tournament.id
   );
