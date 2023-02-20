@@ -7,7 +7,6 @@ import { getActiveTournament } from "./TorneoService";
 import {
   getYouthPlayer,
   setTeam,
-  getYouthPlayerById,
   getYouthPlayers,
 } from "./JugadorInfantilService";
 
@@ -84,7 +83,6 @@ export const createFromTeamView = async (
 
 export const updateFromTeamView = async (team: TeamView) => {
   const tournament = await getActiveTournament();
-  console.log(team.captain);
   const captain = await getYouthPlayer(team.captain?.dni || "", tournament.id);
   await client.equipo.update({
     data: {

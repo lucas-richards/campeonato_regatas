@@ -30,7 +30,11 @@ const ArmadoEquipos = (props: TeamCreationProps) => {
     const response = await fetch(`/api/admin/teams/${cat}`);
     const teams: TeamCreationsView = await response.json();
     const tv = teams.teams.map((el) => fromTeamToTeamView(el));
-    console.log(tv);
+    tv.forEach((el) => {
+      el.players = el.players.sort(
+        (cur, next) => cur.position.value - next.position.value
+      );
+    });
     setCategory(cat);
     setPlayers(teams.noTeam);
     setTeamViews(tv);
