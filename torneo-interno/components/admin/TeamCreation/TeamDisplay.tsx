@@ -10,10 +10,10 @@ interface Props {
 
 const TeamDisplay = (props: Props) => {
   return (
-    <Grid container columnGap={1} rowGap={1} justifyContent="center" p={4}>
+    <Grid container spacing={2}>
       {props.teams.map((el, index) => (
-        <Grid item xs={3} key={index}>
-          <CustomDroppable id={el.id}>
+        <Grid item xs={4} key={index}>
+          <CustomDroppable droppableId={el.id}>
             <TeamComponent team={el}></TeamComponent>
           </CustomDroppable>
         </Grid>

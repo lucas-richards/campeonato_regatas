@@ -8,50 +8,77 @@ import {
   DropResult,
   DraggableLocation,
 } from "react-beautiful-dnd";
-import { ResolverResult } from "react-hook-form";
+import { deepCopy } from "../../../commons/Commons";
 
 interface Props {
   noTeamPlayers: TeamPlayer[];
   teams: TeamView[];
-  onPlayerRearranged: (teams: TeamView[]) => void;
+  onPlayerRearranged: (teams: TeamView[], noTeamPlayers: TeamPlayer[]) => void;
 }
 
 const TeamBuildingLayout = (props: Props) => {
+  const noTeamPlayerDroppable = "no-team-players";
+
   const rearangePlayers = (
     source: DraggableLocation,
     destination: DraggableLocation
   ) => {
-    const teamsCopy: TeamView[] = JSON.parse(JSON.stringify(props.teams));
-    const sourceTeam = teamsCopy.find((el) => el.id === source.droppableId);
-    const destinationTeam = teamsCopy.find(
-      (el) => el.id === destination.droppableId
-    );
-    if (sourceTeam && destinationTeam) {
-      const player = sourceTeam.players[source.index];
+    const teamsCopy: TeamView[] = deepCopy(props.teams);
+    let noTeamPlayersCopy: TeamPlayer[] = deepCopy(props.noTeamPlayers);
 
-      if (player) {
-        sourceTeam.players = sourceTeam.players.filter(
-          (el) => el.dni !== player?.dni
+    const getPlayer = () =>
+      source.droppableId === noTeamPlayerDroppable
+        ? noTeamPlayersCopy[source.index]
+        : teamsCopy.find((el) => el.id === source.droppableId)?.players[
+            source.index
+          ];
+    const remove = (player: TeamPlayer) => {
+      if (source.droppableId === noTeamPlayerDroppable) {
+        noTeamPlayersCopy = noTeamPlayersCopy.filter(
+          (el) => el.dni !== player.dni
         );
-        destinationTeam.players.push(player);
+      } else {
+        const team = teamsCopy.find((el) => el.id === source.droppableId);
+        if (team)
+          team.players = team.players.filter((el) => el.dni !== player.dni);
       }
+    };
+
+    const add = (player: TeamPlayer) => {
+      if (destination.droppableId === noTeamPlayerDroppable) {
+        noTeamPlayersCopy.push(player);
+      } else {
+        const team = teamsCopy.find((el) => el.id === destination.droppableId);
+        if (team) team.players.push(player);
+      }
+    };
+
+    const player = getPlayer();
+    if (player) {
+      remove(player);
+      add(player);
     }
 
-    return teamsCopy;
+    return { teamsCopy, noTeamPlayersCopy };
   };
+
   const onDragEnd = (result: DropResult) => {
     const { source, destination } = result;
     if (!destination || destination.droppableId === source.droppableId) return;
 
-    const teamsCopy = rearangePlayers(source, destination);
+    const resorted = rearangePlayers(source, destination);
 
-    props.onPlayerRearranged(teamsCopy);
+    props.onPlayerRearranged(resorted.teamsCopy, resorted.noTeamPlayersCopy);
   };
+
   return (
     <DragDropContext onDragEnd={onDragEnd}>
-      <Grid container>
+      <Grid container spacing={2}>
         <Grid item xs={3}>
-          <NoTeamPlayers noTeam={props.noTeamPlayers}></NoTeamPlayers>
+          <NoTeamPlayers
+            noTeam={props.noTeamPlayers}
+            noTeamPlayerDroppable={noTeamPlayerDroppable}
+          ></NoTeamPlayers>
         </Grid>
         <Grid item xs={9}>
           <TeamDisplay teams={props.teams}></TeamDisplay>

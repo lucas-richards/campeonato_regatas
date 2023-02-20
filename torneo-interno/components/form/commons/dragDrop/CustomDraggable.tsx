@@ -2,13 +2,13 @@ import React from "react";
 import { Draggable } from "react-beautiful-dnd";
 
 interface Props {
-  id: string;
+  draggableId: string;
   index: number;
 }
 
 const CustomDraggable = (props: React.PropsWithChildren<Props>) => {
   return (
-    <Draggable draggableId={props.id} index={props.index}>
+    <Draggable draggableId={props.draggableId} index={props.index}>
       {(provided) => (
         <div
           {...provided.draggableProps}
