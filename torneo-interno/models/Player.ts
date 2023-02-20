@@ -35,7 +35,7 @@ export interface YouthPlayer {
   thirdChild: boolean;
   captain: boolean;
   category: Category;
-  teamId: number;
+  teamId?: number;
 }
 
 export interface Category {

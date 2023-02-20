@@ -9,13 +9,12 @@ interface Props {
 }
 
 const TeamDisplay = (props: Props) => {
-  console.log(props.teams);
   return (
     <Grid container spacing={2}>
       {props.teams.length > 0 ? (
         props.teams.map((el, index) => (
           <Grid item xs={4} key={index}>
-            <CustomDroppable droppableId={el.id}>
+            <CustomDroppable droppableId={el.id.toString()}>
               <TeamComponent team={el}></TeamComponent>
             </CustomDroppable>
           </Grid>

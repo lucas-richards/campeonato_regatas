@@ -1,3 +1,4 @@
+import { responsable } from "@prisma/client";
 import { Owner } from "../../models/Player";
 import { ID, prismaClient } from "./PrismaClientServer";
 
@@ -14,7 +15,7 @@ export const getResponsableId = async (dni: string): Promise<number> => {
 };
 
 export const createResponsable = async (owner: Owner): Promise<number> => {
-  await client.responsable.create({
+  const newOwner: responsable = await client.responsable.create({
     data: {
       nombre: owner.name,
       apellido: owner.lastName,
@@ -23,10 +24,7 @@ export const createResponsable = async (owner: Owner): Promise<number> => {
       dni: owner.dni,
     },
   });
-
-  const id = await getResponsableId(owner.dni);
-
-  return id || 0;
+  return newOwner.id;
 };
 
 export const updateResponsable = async (id: number, owner: Owner) => {

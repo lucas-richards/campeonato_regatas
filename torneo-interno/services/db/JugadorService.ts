@@ -19,7 +19,7 @@ export const createJugador = async (
   player: Player,
   level: number
 ): Promise<number> => {
-  await client.jugador.create({
+  const newPlayer: jugador = await client.jugador.create({
     data: {
       nombre: player.name,
       apellido: player.lastName,
@@ -32,9 +32,7 @@ export const createJugador = async (
     },
   });
 
-  const id = await getJugadorId(player.dni);
-
-  return id || 0;
+  return newPlayer.id;
 };
 
 export const updateJugador = async (id: number, player: Player) => {

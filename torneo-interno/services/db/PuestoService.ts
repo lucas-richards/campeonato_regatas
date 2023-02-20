@@ -8,6 +8,7 @@ const createPosition = (puesto: puesto): Position => {
   return {
     description: puesto.descripcion,
     value: puesto.valor,
+    symbol: puesto.simbolo,
   };
 };
 export const getPositions = async (): Promise<Position[]> => {

@@ -69,6 +69,5 @@ export const autoCreateTeams = (
     }
   });
 
-  console.log(teams);
   return teams;
 };

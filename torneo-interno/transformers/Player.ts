@@ -77,12 +77,12 @@ export const toPlayer = (player: jugador, level?: nivel): Player => {
 
 export const toYouthPlayer = (
   youthPlayer: jugador_infantil,
-  position?: puesto,
-  level?: nivel,
-  tournament?: torneo,
-  owner?: responsable,
-  player?: jugador,
-  category?: categoria
+  position: puesto,
+  level: nivel,
+  tournament: torneo,
+  owner: responsable,
+  player: jugador,
+  category: categoria
 ): YouthPlayer => {
   const youth: YouthPlayer = {
     emergencyPhone: youthPlayer["telefono_emergencia"],
@@ -91,6 +91,12 @@ export const toYouthPlayer = (
     thirdChild: youthPlayer.tercer_hijo === 1,
     captain: youthPlayer.capitan === 1,
     teamId: youthPlayer.equipo_id || undefined,
+    position: toPosition(position),
+    tournament: toTournament(tournament),
+    owner: toOwner(owner),
+    player: toPlayer(player),
+    category: toCategory(category),
+    level: toLevel(level),
   };
 
   if (position) youth.position = toPosition(position);
