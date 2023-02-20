@@ -15,6 +15,7 @@ export const getFullTeams = async (
     cat.id,
     currentTournament.id
   );
+  const playersInCategory = players.length;
   const teams: Team[] = await getTeams(cat.id, currentTournament.id);
   const noTeam: TeamPlayer[] = [];
   players.forEach((el) => {
@@ -31,5 +32,6 @@ export const getFullTeams = async (
   return {
     teams,
     noTeam,
+    playersInCategory,
   };
 };

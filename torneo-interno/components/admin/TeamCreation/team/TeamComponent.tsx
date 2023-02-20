@@ -1,5 +1,5 @@
 import React, { PropsWithChildren } from "react";
-import { Card, CardContent, Typography } from "@mui/material";
+import { Card, CardActions, CardContent, TextField } from "@mui/material";
 import { TeamView } from "../../../../models/Team";
 import TeamPlayerRow from "./TeamPlayerRow";
 import CustomDraggable from "../../../form/commons/dragDrop/CustomDraggable";
@@ -10,11 +10,20 @@ interface TeamComponentProps {
 }
 
 const TeamComponent = (props: PropsWithChildren<TeamComponentProps>) => {
+  const changedNameHandler = (event: any) => {
+    props.team.name = event.target.value;
+  };
   return (
     <Card variant="outlined">
       <CardContent>
         <div className={classes["team-name"]}>
-          <Typography>{props.team.name}</Typography>
+          <TextField
+            defaultValue={props.team.name}
+            onChange={changedNameHandler}
+            variant="standard"
+            required
+            fullWidth
+          />
         </div>
         <div className={classes["team-players"]}>
           {props.team.players.map((el, index) => (
@@ -27,6 +36,13 @@ const TeamComponent = (props: PropsWithChildren<TeamComponentProps>) => {
           ))}
         </div>
       </CardContent>
+      <CardActions>
+        {props.team.players
+          .map((el) => el.level.value)
+          .reduce((cur, next) => cur + next)}
+        <hr></hr>
+        {props.team.players.length}
+      </CardActions>
     </Card>
   );
 };

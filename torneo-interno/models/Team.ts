@@ -21,6 +21,7 @@ export interface Team {
 export interface TeamCreationsView {
   teams: Team[];
   noTeam: TeamPlayer[];
+  playersInCategory: number;
 }
 
 export interface TeamView {
