@@ -1,6 +1,6 @@
 import React from "react";
 import { Grid, Typography } from "@mui/material";
-import { TeamPlayer } from "../../models/Team";
+import { TeamPlayer } from "../../../../models/Team";
 import classes from "./TeamPlayerRow.module.scss";
 
 export interface TeamPlayerRowProps {
@@ -10,7 +10,7 @@ export interface TeamPlayerRowProps {
 
 const positionClass = ["goalkeeper", "defender", "midfielder", "forward"];
 
-const TeamPlayerRow = (props: TeamPlayerRowProps) => {
+const TeamPlayerRow = (props: React.PropsWithChildren<TeamPlayerRowProps>) => {
   return (
     <Grid
       container
