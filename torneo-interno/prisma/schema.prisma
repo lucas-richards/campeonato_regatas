@@ -20,6 +20,7 @@ model categoria {
   configuracion    configuracion[]
   equipo           equipo[]
   jugador_infantil jugador_infantil[]
+  zona             zona[]
 
   @@index([novedad_id], map: "fk_categoria_novedad1_idx")
 }
@@ -45,8 +46,11 @@ model equipo {
   categoria                                           categoria          @relation(fields: [categoria_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_equipo_categoria1")
   jugador_infantil_equipo_capitanTojugador_infantil   jugador_infantil   @relation("equipo_capitanTojugador_infantil", fields: [capitan], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_equipo_jugador_infantil1")
   torneo                                              torneo             @relation(fields: [torneo_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_equipo_torneo1")
+  equipo_zona                                         equipo_zona[]
   jugador_equipo                                      jugador_equipo[]
   jugador_infantil_jugador_infantil_equipo_idToequipo jugador_infantil[] @relation("jugador_infantil_equipo_idToequipo")
+  partido_partido_localToequipo                       partido[]          @relation("partido_localToequipo")
+  partido_partido_visitanteToequipo                   partido[]          @relation("partido_visitanteToequipo")
 
   @@index([categoria_id], map: "fk_equipo_categoria1_idx")
   @@index([capitan], map: "fk_equipo_jugador_infantil1_idx")
@@ -198,6 +202,8 @@ model tarifas {
 }
 
 /// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by the Prisma Client.
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by the Prisma Client.
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by the Prisma Client.
 model timestamps {
   create_time DateTime? @default(now()) @db.Timestamp(0)
   update_time DateTime? @db.Timestamp(0)
@@ -205,6 +211,8 @@ model timestamps {
   @@ignore
 }
 
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by the Prisma Client.
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by the Prisma Client.
 /// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by the Prisma Client.
 model timestamps_1 {
   create_time DateTime? @default(now()) @db.Timestamp(0)
@@ -220,10 +228,55 @@ model torneo {
   equipo           equipo[]
   jugador_infantil jugador_infantil[]
   tarifas          tarifas[]
+  zona             zona[]
 }
 
 model usuario {
   id       Int     @id @default(autoincrement())
   username String? @db.VarChar(45)
   password String? @db.VarChar(45)
+}
+
+model equipo_zona {
+  Zona_id   Int
+  equipo_id Int
+  zona      zona   @relation(fields: [Zona_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_Zona_has_equipo_Zona1")
+  equipo    equipo @relation(fields: [equipo_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_Zona_has_equipo_equipo1")
+
+  @@id([Zona_id, equipo_id])
+  @@index([Zona_id], map: "fk_Zona_has_equipo_Zona1_idx")
+  @@index([equipo_id], map: "fk_Zona_has_equipo_equipo1_idx")
+}
+
+model partido {
+  id                               Int       @id @default(autoincrement())
+  zona_id                          Int
+  local                            Int
+  visitante                        Int
+  gol_local                        Int?
+  gol_visitante                    Int?
+  timestamp                        DateTime? @default(now()) @db.Timestamp(0)
+  equipo_partido_localToequipo     equipo    @relation("partido_localToequipo", fields: [local], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_partido_equipo1")
+  equipo_partido_visitanteToequipo equipo    @relation("partido_visitanteToequipo", fields: [visitante], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_partido_equipo2")
+  zona                             zona      @relation(fields: [zona_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_partido_zona1")
+
+  @@index([local], map: "fk_partido_equipo1_idx")
+  @@index([visitante], map: "fk_partido_equipo2_idx")
+  @@index([zona_id], map: "fk_partido_zona1_idx")
+}
+
+model zona {
+  id           Int           @id @default(autoincrement())
+  nombre       String       @db.VarChar(45)
+  ronda        Int
+  tipo         String       @db.VarChar(45)
+  categoria_id Int
+  torneo_id    Int
+  equipo_zona  equipo_zona[]
+  partido      partido[]
+  categoria    categoria     @relation(fields: [categoria_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_Zona_categoria1")
+  torneo       torneo        @relation(fields: [torneo_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_Zona_torneo1")
+
+  @@index([categoria_id], map: "fk_Zona_categoria1_idx")
+  @@index([torneo_id], map: "fk_Zona_torneo1_idx")
 }

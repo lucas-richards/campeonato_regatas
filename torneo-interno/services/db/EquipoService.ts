@@ -1,7 +1,7 @@
-import { equipo, Prisma } from "@prisma/client";
+import { equipo, equipo_zona, Prisma } from "@prisma/client";
 import { prismaClient } from "./PrismaClientServer";
-import { toTeam } from "../../transformers/Team";
-import { Team, TeamView } from "../../models/Team";
+import { toTeam, toZoneTeam } from "../../transformers/Team";
+import { Team, TeamView, ZoneTeam } from "../../models/Team";
 import { getCategoryFromDescription } from "./CategoriaService";
 import { getActiveTournament } from "./TorneoService";
 import {
@@ -20,7 +20,8 @@ const teamIncludes = Prisma.validator<Prisma.equipoInclude>()({
 
 export const getTeams = async (
   category: number,
-  tournament: number
+  tournament: number,
+  withPlayers: boolean = true
 ): Promise<Team[]> => {
   const teams: Prisma.equipoGetPayload<{
     include: typeof teamIncludes;
@@ -31,17 +32,20 @@ export const getTeams = async (
     },
     include: teamIncludes,
   });
+  if (withPlayers) {
+    const captains = await getYouthPlayers(teams.map((el) => el.capitan));
 
-  const captains = await getYouthPlayers(teams.map((el) => el.capitan));
-
-  return teams.map((el) =>
-    toTeam(
-      el,
-      el.categoria,
-      el.torneo,
-      captains.find((cap) => cap.id === el.capitan)?.player
-    )
-  );
+    return teams.map((el) =>
+      toTeam(
+        el,
+        el.categoria,
+        el.torneo,
+        captains.find((cap) => cap.id === el.capitan)?.player
+      )
+    );
+  } else {
+    return teams.map((el) => toZoneTeam(el));
+  }
 };
 
 const createTeam = async (
@@ -96,4 +100,35 @@ export const updateFromTeamView = async (team: TeamView) => {
   team.players.forEach(async (el) => {
     await setTeam(el.dni, tournament.id, +team.id);
   });
+};
+
+export const getTeamsFromZones = async (zones: number[]): Promise<Team[]> => {
+  const teamZones = await client.equipo_zona.findMany({
+    where: {
+      Zona_id: {
+        in: zones,
+      },
+    },
+    include: { equipo: true },
+  });
+
+  return teamZones.map((el: any) => toZoneTeam(el.equipo));
+};
+
+export const getZoneTeam = async (
+  category: number,
+  tournament: number,
+  excludeTeams?: number[]
+): Promise<ZoneTeam[]> => {
+  const teams: equipo[] = await client.equipo.findMany({
+    where: {
+      categoria_id: category,
+      torneo_id: tournament,
+      id: {
+        notIn: excludeTeams ? excludeTeams : [],
+      },
+    },
+  });
+
+  return teams.map((el) => toZoneTeam(el));
 };

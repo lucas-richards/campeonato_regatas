@@ -53,7 +53,7 @@ export const getCategoryId = async (
 };
 
 export const getCategories = async (
-  gender: string,
+  gender = "",
   youth = true
 ): Promise<Category[]> => {
   interface WhereClause {
@@ -70,6 +70,12 @@ export const getCategories = async (
   const categorias: categoria[] = await client.categoria.findMany({
     where: whereClause,
   });
+
+  return categorias.map((el) => toCategory(el));
+};
+
+export const getAllCategories = async () => {
+  const categorias: categoria[] = await client.categoria.findMany();
 
   return categorias.map((el) => toCategory(el));
 };
