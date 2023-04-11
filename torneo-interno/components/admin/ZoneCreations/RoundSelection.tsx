@@ -21,7 +21,7 @@ const RoundSelection = (props: RoundSelectionProps) => {
           </Grid>
         </Grid>
         <Grid item xs={2}>
-          <Button variant="text" onClick={props.onNewRound}>
+          <Button variant="outlined" onClick={props.onNewRound}>
             Nueva ronda
           </Button>
         </Grid>

@@ -14,6 +14,7 @@ interface ZoneCreationProps {
 const ZoneCreation = (props: ZoneCreationProps) => {
   const [zones, setZones]: [Zone[], any] = useState([]);
   const [noZoneTeams, setNoZoneTeams]: [ZoneTeam[], any] = useState([]);
+  const [selectedRound, setSelectedRound]: [number, any] = useState(0);
   const onRoundSelection = async (round: number) => {
     const response = await fetch(`/api/admin/zones/${props.category}/${round}`);
     const selectedRound: RoundView = await response.json();
@@ -21,7 +22,9 @@ const ZoneCreation = (props: ZoneCreationProps) => {
     setNoZoneTeams(selectedRound.noZone);
   };
   const onNewRound = () => {
-    onRoundSelection(0);
+    const newRound = props.rounds.length + 1;
+    props.rounds.push(newRound);
+    onRoundSelection(newRound);
   };
 
   return (
