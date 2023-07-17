@@ -1,0 +1,15 @@
+.team {
+  background: #eee;
+  border-radius: 5px;
+  margin-bottom: 5px;
+
+  &:hover {
+    transition: 0.2s;
+    transform: scale(1.025) translateY(-3px);
+    box-shadow: 0 5px 5px rgba(0, 0, 0, 0.2);
+  }
+
+  & > * {
+    padding: 4px 0;
+  }
+}

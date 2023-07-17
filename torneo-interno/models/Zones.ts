@@ -11,9 +11,11 @@ export interface Zone {
   name: string;
   round: number;
   type: ZoneType;
-  category: Category;
-  tournament: Tournament;
-  teams?: ZoneTeam[];
+  category?: Category;
+  categoryString?: string;
+  tournament?: Tournament;
+  teams: ZoneTeam[];
+  new?: boolean;
 }
 
 export interface Match {
