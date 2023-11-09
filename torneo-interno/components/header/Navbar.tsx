@@ -26,6 +26,9 @@ function Navbar() {
           <Link href="/faq" className={classes.link}>
             FAQ
           </Link>
+          <Link href="/deuda" className={classes.link}>
+            Deuda
+          </Link>
         </div>
       </Toolbar>
     </AppBar>
