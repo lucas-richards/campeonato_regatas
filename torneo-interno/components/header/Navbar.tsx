@@ -15,7 +15,7 @@ function Navbar() {
         </Avatar>
         <div className={classes.navlinks}>
           <Link href="/" className={classes.link}>
-            Home
+            Home1
           </Link>
           <Link href="/about" className={classes.link}>
             About
