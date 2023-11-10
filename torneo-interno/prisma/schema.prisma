@@ -59,7 +59,7 @@ model equipo {
 
 model jugador {
   id               Int                @id @default(autoincrement())
-  dni              String             @db.VarChar(45)
+  dni              String             @db.VarChar(45) @unique
   nombre           String             @db.VarChar(45)
   apellido         String             @db.VarChar(45)
   mail             String             @db.VarChar(45)
